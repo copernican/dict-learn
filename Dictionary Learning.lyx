@@ -1,0 +1,764 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\allowdisplaybreaks
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\dif}{d}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\usepackage{algpseudocode}
+\end_preamble
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Online Detection of Unusual Events in Audio via Dynamic Sparse Coding
+\end_layout
+
+\begin_layout Author
+Courtney Grazzini
+\begin_inset Newline newline
+\end_inset
+
+Meredith Miller
+\begin_inset Newline newline
+\end_inset
+
+Sean Wilson
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Subsection
+What is dictionary learning
+\end_layout
+
+\begin_layout Standard
+foo
+\end_layout
+
+\begin_layout Subsection
+What is online learning
+\end_layout
+
+\begin_layout Standard
+Why it can provide advantages over batch learning
+\end_layout
+
+\begin_layout Subsection
+Why we prefer sparsity
+\end_layout
+
+\begin_layout Section
+Methodology
+\end_layout
+
+\begin_layout Standard
+equations, formal statement of algorithm for online dictionary learning,
+ probably similar to Mairal.
+\end_layout
+
+\begin_layout Standard
+This is how to add a reference (Insert > Citation):
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is how to add an algorithm float.
+ See LaTeX preamble for algpseudocode.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}[1]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Function{fft}{$
+\backslash
+mathbf{x},n$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+If{$n=1$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\backslash
+Return{$
+\backslash
+mathbf{x}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Else
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{x}^{\text{even}}\gets\begin{bmatrix}x_{0} & x_{2} & \cdots & x_{n-2}\end{bmatrix}^{\mathsf{T}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State $
+\backslash
+mathbf{v}
+\backslash
+gets$ 
+\backslash
+Call{fft}{$
+\backslash
+mathbf{x}^{
+\backslash
+text{even}},n/2$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{x}^{\text{odd}}\gets\begin{bmatrix}x_{1} & x_{3} & \cdots & x_{n-1}\end{bmatrix}^{\mathsf{T}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State $
+\backslash
+mathbf{w}
+\backslash
+gets$ 
+\backslash
+Call{fft}{$
+\backslash
+mathbf{x}^{
+\backslash
+text{odd}},n/2$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$j
+\backslash
+in
+\backslash
+left
+\backslash
+{0,1,
+\backslash
+ldots,n/2-1
+\backslash
+right
+\backslash
+}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $y_{j}\gets v_{j}+\mathrm{e}^{-2\pi\iota\cdot j/n}\cdot w_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $y_{j+n/2}\gets v_{j}-\mathrm{e}^{-2\pi\iota\cdot j/n}\cdot w_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{y}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndIf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFunction
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Fast Fourier Transform
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Definition of unusual event / change point detection / whatever
+\end_layout
+
+\begin_layout Standard
+algorithm for unusual event detection, probably similar to 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Application
+\end_layout
+
+\begin_layout Subsection
+Structure of an audio signal
+\end_layout
+
+\begin_layout Standard
+why might we want to do online learning for an audio signal (consider a
+ stream, or a huge data set, or whatever), but biggest idea is that online
+ learning allows us to detect unusual events (if we learn on the whole data
+ set, then possibly our dictionary will learn the unusual events, impeding
+ our ability to identify them)
+\end_layout
+
+\begin_layout Subsection
+What kind of dictionary could we learn for an audio signal
+\end_layout
+
+\begin_layout Standard
+maybe insert image of different waveforms, e.g., as in 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.seaandsailor.com/dictlearning.html"
+target "http://www.seaandsailor.com/dictlearning.html"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Unusual event as applied to an audio signal
+\end_layout
+
+\begin_layout Standard
+Change in meter, key change, whatever
+\end_layout
+
+\begin_layout Subsection
+Test case
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ WAV or whatever, walk through the code, include graphics, especially SSE/MSE
+ whatever reconstruction, and map peaks in error to 
+\begin_inset Quotes eld
+\end_inset
+
+events
+\begin_inset Quotes erd
+\end_inset
+
+ (hopefully, unusual) in song
+\end_layout
+
+\begin_layout Standard
+This is how to add a Python 3 code chunk.
+ knitr does not support Python plotting out of the box, but fortunately
+ the knitron package makes it possible:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+target "https://github.com/fhirschmann/knitron"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Follow the instructions there to set it up, then load the package in hidden
+ chunk.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, echo = F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(knitron)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We are now ready to run some Python code.
+ Notice chunk option engine = 'ipython'.
+ You'll need to install scipy, matplotlib, and numpy, which can be done
+ with pip3 install scipy, matplotlib (numpy is a scipy dependency).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<example, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align = 'center',
+ fig.pos = 'h', fig.cap = 'figure caption'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# knitron already imports matplotlib for us
+\end_layout
+
+\begin_layout Plain Layout
+
+# import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+import scipy as sc
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Load signal used to build the dictionary
+\end_layout
+
+\begin_layout Plain Layout
+
+from scipy.io import wavfile
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import os
+\end_layout
+
+\begin_layout Plain Layout
+
+fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
+\end_layout
+
+\begin_layout Plain Layout
+
+data = data / 2.0**15
+\end_layout
+
+\begin_layout Plain Layout
+
+print(data.shape)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.rcParams.update({'font.size': 10})
+\end_layout
+
+\begin_layout Plain Layout
+
+         
+\end_layout
+
+\begin_layout Plain Layout
+
+plt.plot(data[0:fs*5]) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Discussion
+\end_layout
+
+\begin_layout Standard
+how did the algorithm perform, how could it be extended
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "library"
+options "apalike"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
