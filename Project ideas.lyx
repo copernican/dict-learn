@@ -1,0 +1,401 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\allowdisplaybreaks
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\dif}{d}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\usepackage{algpseudocode}
+\end_preamble
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Sparse Dictionary Learning
+\begin_inset Newline newline
+\end_inset
+
+Project ideas
+\end_layout
+
+\begin_layout Author
+Grazzini, Miller, Wilson
+\end_layout
+
+\begin_layout Section
+Overall project structure
+\end_layout
+
+\begin_layout Standard
+3-4 pages consists of review of the literature, with key algorithms and
+ results, e.g., convexity, discussed or shown as applicable.
+ 1-2 pages with application to specific data set, presentation of results.
+ Consider adapting published code.
+\end_layout
+
+\begin_layout Section
+Literature review
+\end_layout
+
+\begin_layout Standard
+While off-the-shelf dictionaries, e.g., the Haar wavelet basis, can give acceptabl
+e performance in representing a signal 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+, they are not adapted to the particular 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ at hand, which suggests that a dictionary learned from the signal itself
+ could give better performance.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sparse models are well adapted to natural signals, and do not require that
+ the basis vectors be orthogonal.
+ A signal 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{m}$
+\end_inset
+
+ admits a sparse approximation over a 
+\emph on
+dictionary
+\emph default
+ 
+\begin_inset Formula $\mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
+\end_inset
+
+, with 
+\begin_inset Formula $k$
+\end_inset
+
+ columns referred to as 
+\emph on
+atoms
+\emph default
+, when one can find a linear combination of a 
+\begin_inset Quotes eld
+\end_inset
+
+few
+\begin_inset Quotes erd
+\end_inset
+
+ atoms from 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ that is 
+\begin_inset Quotes eld
+\end_inset
+
+close
+\begin_inset Quotes erd
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+.
+ Many (recent) algorithms for dictionary learning are iterative 
+\emph on
+batch
+\emph default
+ procedures, accessing the whole training set at each iteration in order
+ to minimize a cost function under some constraints.
+ Such methods are not well suited to very large training sets, or to dynamic
+ training data changing over time.
+ 
+\end_layout
+
+\begin_layout Standard
+An 
+\emph on
+online
+\emph default
+ approach processes one element (or a small subset) of the training set
+ at a time.
+ This approach involves optimization of a smooth nonconvex function over
+ a convex set, minimizing the 
+\emph on
+expected
+\emph default
+ cost when the training set size goes to infinity.
+ This optimization is efficiently solved by minimizing at each step a quadratic
+ surrogate function of the empirical cost over a set of constraints.
+ The resulting approach is shown to offer significant performance improvement
+ over previous approaches to dictionary learning.
+\end_layout
+
+\begin_layout Standard
+In particular, we wish to minimize the expected cost 
+\begin_inset Formula 
+\[
+f\left(\mathbf{D}\right)\coloneqq\E_{\mathbf{x}}\left[l\left(\mathbf{x},\mathbf{D}\right)\right]=\lim_{n\rightarrow\infty}f_{n}\left(\mathbf{D}\right)\text{ a.s.},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+f_{n}\left(\mathbf{D}\right)\coloneqq\frac{1}{n}\sum_{i=1}^{n}l\left(\mathbf{x}^{\left(i\right)},\mathbf{D}\right)
+\]
+
+\end_inset
+
+is the empirical cost function,
+\begin_inset Formula 
+\[
+l\left(\mathbf{x},\mathbf{D}\right)\coloneqq\min_{\boldsymbol{\alpha}\in\mathbb{R}^{k}}\frac{1}{2}\left\Vert \mathbf{x}-\mathbf{D}\boldsymbol{\alpha}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}\right\Vert _{1}
+\]
+
+\end_inset
+
+is the optimal value of the 
+\begin_inset Formula $\ell_{1}$
+\end_inset
+
+
+\emph on
+-sparse coding problem
+\emph default
+, and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is a regularization parameter.
+\end_layout
+
+\begin_layout Section
+Application ideas
+\end_layout
+
+\begin_layout Subsection
+Anomaly detection in audio files
+\end_layout
+
+\begin_layout Standard
+Start with a dictionary 
+\begin_inset Formula $\mathbf{D}_{0}$
+\end_inset
+
+, e.g., Fourier basis, or possibly learn a dictionary from the first 
+\begin_inset Formula $n_{0}$
+\end_inset
+
+ samples of the audio file, then use sparse learning to update the dictionary
+ online, i.e., as we process each successive sample (possibly extending the
+ "mini-batch" idea of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+, similar to a sliding window in the STFT).
+ Then use the method proposed by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-2"
+
+\end_inset
+
+ to detect "anomalous" events in the song, e.g., the single high F in the
+ "Star Spangled Banner," a key change in a song, the "bridge" in many rock
+ and pop songs, etc.
+ Consider testing on a song with "concept drift," e.g., "Bohemian Rhapsody."
+ Also applications to compressibility, e.g., could a dictionary learned from
+ one song on an album be used to compress the remaining songs on the album,
+ where we implicitly assume that songs on the same album share a dictionary.
+ Could the algorithm detect which songs became hits (anomalies)? Application,
+ let's say, to 
+\emph on
+Jagged Little Pill
+\emph default
+ (though basically every song was a hit, just an idea).
+\end_layout
+
+\begin_layout Subsection
+Implementation
+\end_layout
+
+\begin_layout Standard
+We will implement using the SPArse Modeling Software (SPAMS) package of
+ Mairal et al.
+ 
+\end_layout
+
+\begin_layout Subsection
+Inpainting
+\end_layout
+
+\begin_layout Standard
+In image or audio context, can we remove noise/defacement (as in the text
+ in the bird image) using this technique, how does it compare to other technique
+s.
+\end_layout
+
+\begin_layout Subsection
+DNA
+\end_layout
+
+\begin_layout Standard
+Possible application to aligning reads, detecting mutations (anomalies)
+ without a reference genome.
+\end_layout
+
+\begin_layout Subsection
+Text
+\end_layout
+
+\begin_layout Standard
+Can the approach be used on a "stream" of words to learn a dictionary that
+ enables superior compressibility or, more interestingly, anomaly detection,
+ where anomalies are viewed as the beginning of a new chapter, a lengthy
+ monologue, sections of dialog vs descriptive text, etc.
+ Possible application to plagiarism detection.
+ Consider texts available from Project Gutenberg.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Ma09"
+key "key-1"
+
+\end_inset
+
+Mairal, J., Bach, F., Ponce, J., & Sapiro, G.
+ (2009).
+ Online dictionary learning for sparse coding.
+ In Proceedings of the 26th Annual International Conference on Machine Learning
+ - ICML ’09 (pp.
+ 689–696).
+ New York, New York, USA: ACM Press.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://doi.org/10.1145/1553374.1553463"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Zh11"
+key "key-2"
+
+\end_inset
+
+Zhao, B., Fei-Fei, L., & Xing, E.
+ P.
+ (2011).
+ Online detection of unusual events in videos via dynamic sparse coding.
+ Proceedings of the IEEE Computer Society Conference on Computer Vision
+ and Pattern Recognition, 3313–3320.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://doi.org/10.1109/CVPR.2011.5995524"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
