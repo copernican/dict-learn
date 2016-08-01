@@ -121,7 +121,7 @@ What is online learning - Sean
 \end_layout
 
 \begin_layout Standard
-Why it can provide advantages over batch learning
+Why it can provide advantages over batch learning, can handle concept drift
 \end_layout
 
 \begin_layout Subsection
@@ -739,6 +739,11 @@ plt.plot(data[0:fs*5])
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Include table of unusual events (key change, meter change, new instrument
+ comes in)
 \end_layout
 
 \begin_layout Section
