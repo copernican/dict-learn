@@ -105,11 +105,11 @@ Sean Wilson
 \end_layout
 
 \begin_layout Section
-Introduction - Sean
+Introduction
 \end_layout
 
 \begin_layout Subsection
-What is dictionary learning
+What is dictionary learning - Sean
 \end_layout
 
 \begin_layout Standard
@@ -117,7 +117,7 @@ foo
 \end_layout
 
 \begin_layout Subsection
-What is online learning
+What is online learning - Sean
 \end_layout
 
 \begin_layout Standard
@@ -125,11 +125,11 @@ Why it can provide advantages over batch learning
 \end_layout
 
 \begin_layout Subsection
-Why we prefer sparsity
+Why we prefer sparsity - Sean
 \end_layout
 
 \begin_layout Section
-Methodology
+Methodology - Courtney to start
 \end_layout
 
 \begin_layout Standard
@@ -521,7 +521,7 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Application
+Application - TBD after code done
 \end_layout
 
 \begin_layout Subsection
@@ -561,7 +561,7 @@ Change in meter, key change, whatever
 \end_layout
 
 \begin_layout Subsection
-Test case
+Test case - Meredith/Sean
 \end_layout
 
 \begin_layout Standard
@@ -742,11 +742,11 @@ plt.plot(data[0:fs*5])
 \end_layout
 
 \begin_layout Section
-Discussion
+Discussion - TBD
 \end_layout
 
 \begin_layout Standard
-how did the algorithm perform, how could it be extended - Meredith
+how did the algorithm perform, how could it be extended
 \end_layout
 
 \begin_layout Standard
