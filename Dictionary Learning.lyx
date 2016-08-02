@@ -4,7 +4,7 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass amsart
 \begin_preamble
 \allowdisplaybreaks
 \DeclareMathOperator{\E}{E}
@@ -17,6 +17,9 @@
 \end_preamble
 \use_default_options true
 \begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
 knitr
 \end_modules
 \maintain_unincluded_children false
@@ -109,19 +112,212 @@ Introduction
 \end_layout
 
 \begin_layout Subsection
-What is dictionary learning - Sean
+Dictionary learning
 \end_layout
 
 \begin_layout Standard
-foo
+We can represent a signal as a linear combination of basis elements.
+ We refer to the basis elements as 
+\emph on
+atoms
+\emph default
+, and to the collection of these elements as a 
+\emph on
+dictionary
+\emph default
+.
+ We do not require that the atoms be linearly independent, and we allow
+ the dictionary to be 
+\emph on
+overcomplete
+\emph default
+, i.e., it may contain more basis elements than the dimension of the signal
+ it is used to represent.
+\end_layout
+
+\begin_layout Standard
+Predefined dictionaries are often used to represent signals.
+ Let 
+\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{u},\mathbf{v}\right\} $
+\end_inset
+
+ for some linearly independent 
+\begin_inset Formula $\mathbf{u},\mathbf{v}\in\mathbb{R}^{2}$
+\end_inset
+
+.
+ Then, we can represent any signal 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{2}$
+\end_inset
+
+ in terms of the atoms 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+ of the dictionary 
+\begin_inset Formula $\mathcal{D}$
+\end_inset
+
+.
+ We might similarly consider the two-dimensional Haar wavelet basis on the
+ space of real, 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ matrices, whose elements can be used to encode images.
+ In place of a predefined dictionary, we may also choose to learn a dictionary
+ directly from the signal of interest, a procedure that has been shown,
+ e.g., by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Elad2006"
+
+\end_inset
+
+, to perform as well as or better than the predefined approach.
+\end_layout
+
+\begin_layout Standard
+A signal 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{n}$
+\end_inset
+
+ is said to have a 
+\begin_inset Formula $k$
+\end_inset
+
+
+\emph on
+-sparse representation
+\emph default
+ in a dictionary 
+\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{v}_{i}\right\} _{i\in\mathcal{I}}\subset\mathbb{R}^{n}$
+\end_inset
+
+ if there is a system of coefficients 
+\begin_inset Formula $\left\{ c_{i}\right\} _{i\in\mathcal{I}}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\mathbf{x}=\sum_{i\in\mathcal{I}}c_{i}\mathbf{v}_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{i}\neq0$
+\end_inset
+
+ for at most 
+\begin_inset Formula $k$
+\end_inset
+
+ many indices 
+\begin_inset Formula $i\in\mathcal{I}$
+\end_inset
+
+.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Elad2006"
+
+\end_inset
+
+ and others have shown sparse representions of natural signals to be very
+ effective.
+ Thus, our task in 
+\emph on
+dictionary learning
+\emph default
+ given some signal 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ is to learn a dictionary 
+\begin_inset Formula $\mathcal{D}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ has a 
+\begin_inset Formula $k$
+\end_inset
+
+-sparse representation in terms of the atoms of 
+\begin_inset Formula $\mathcal{D}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
-What is online learning - Sean
+Online learning
 \end_layout
 
 \begin_layout Standard
-Why it can provide advantages over batch learning, can handle concept drift
+A dictionary is typically learned from a training set (possibly the signal
+ to be reconstructed) using a constrained optimization procedure.
+ Implementing this optimization as a 
+\emph on
+batch
+\emph default
+ procedure, wherein the entire training set is used, has proved effective
+ [citation? see Lee et al 2007], it does not scale well to very large training
+ sets, or to training sets that vary over time, e.g., streaming audio or video
+ signals.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ propose an 
+\emph on
+online
+\emph default
+ approach to overcome these limitations, wherein the elements of the training
+ set are accessed one at a time or in small batches.
+\end_layout
+
+\begin_layout Standard
+When learning a dictionary for a streaming signal, our approach must also
+ account for the phenomenon of 
+\emph on
+concept drift
+\emph default
+, wherein the statistical properties of the signal change unpredictably
+ over time.
+ If our learning method does not allow the dictionary to adapt to these
+ changes, then reconstruction performance will degrade as we attempt to
+ represent portions of the signal that the dictionary has not previously
+ 
+\begin_inset Quotes eld
+\end_inset
+
+seen.
+\begin_inset Quotes erd
+\end_inset
+
+ For example, if we wish to respresent the video feed of a traffic camera,
+ we are likely to learn a dictionary well suited to representing various
+ motor vehicles.
+ If the same street is closed for a parade, our dictionary is not likely
+ to perform acceptably when reconstructing a marching band.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+ have shown that online algorithms are robust to concept drift precisely
+ because they permit the dictionary to adapt to new phenomena.
 \end_layout
 
 \begin_layout Subsection
@@ -695,17 +891,17 @@ import os
 
 \begin_layout Plain Layout
 
-fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
+# fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
 \end_layout
 
 \begin_layout Plain Layout
 
-data = data / 2.0**15
+# data = data / 2.0**15
 \end_layout
 
 \begin_layout Plain Layout
 
-print(data.shape)
+# print(data.shape)
 \end_layout
 
 \begin_layout Plain Layout
@@ -714,7 +910,7 @@ print(data.shape)
 
 \begin_layout Plain Layout
 
-plt.rcParams.update({'font.size': 10})
+# plt.rcParams.update({'font.size': 10})
 \end_layout
 
 \begin_layout Plain Layout
@@ -724,7 +920,7 @@ plt.rcParams.update({'font.size': 10})
 
 \begin_layout Plain Layout
 
-plt.plot(data[0:fs*5]) 
+# plt.plot(data[0:fs*5]) 
 \end_layout
 
 \begin_layout Plain Layout
