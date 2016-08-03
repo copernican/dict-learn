@@ -107,6 +107,20 @@ Meredith Miller
 Sean Wilson
 \end_layout
 
+\begin_layout Abstract
+Sparse representation of a natural signal in terms of a dictionary learned
+ from the signal itself has been shown to be highly effective.
+ Online methods for dictionary learning mitigate scalability issues with
+ traditional batch learning methods, and offer the ability to learn dictionaries
+ for streaming signals.
+ We review the key concepts of sparse dictionary learning and important
+ results related to the online extension of such methods.
+ We show that online dictionary learning can be used to detect unusual events
+ in audio signals, such as a change in meter or the appearance of a new
+ instrument, and that such methods are robust to concept drift in the target
+ signal.
+\end_layout
+
 \begin_layout Section
 Introduction
 \end_layout
@@ -219,6 +233,28 @@ A signal
 \end_inset
 
 .
+ A sparse representation of 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ may be preferable to a 
+\begin_inset Quotes eld
+\end_inset
+
+dense
+\begin_inset Quotes erd
+\end_inset
+
+ representation (assuming that both representations have similar reconstruction
+ performance) for two primary reasons.
+ The first is the principle of parsimony (or model interpretability): if
+ we can represent the signal with relatively few atoms (the coefficients
+ of the remaining atoms being zero), our understanding of the signal is
+ easier to characterize than if we had to interpret the effects of a larger
+ number of atoms.
+ I.e., we have identified redundancy in the atoms relative to the signal.
+ The second is computational efficiency: fewer nonzero coefficients means
+ that we can represent and manipulate the signal using fewer resources.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -244,11 +280,7 @@ dictionary learning
 \begin_inset Formula $\mathbf{x}$
 \end_inset
 
- has a 
-\begin_inset Formula $k$
-\end_inset
-
--sparse representation in terms of the atoms of 
+ has a sparse representation in terms of the atoms of 
 \begin_inset Formula $\mathcal{D}$
 \end_inset
 
@@ -262,14 +294,14 @@ Online learning
 \begin_layout Standard
 A dictionary is typically learned from a training set (possibly the signal
  to be reconstructed) using a constrained optimization procedure.
- Implementing this optimization as a 
+ We can implement this optimization as a 
 \emph on
 batch
 \emph default
- procedure, wherein the entire training set is used, has proved effective
- [citation? see Lee et al 2007], it does not scale well to very large training
- sets, or to training sets that vary over time, e.g., streaming audio or video
- signals.
+ procedure, wherein the entire training set is used at each iteration.
+ While such methods have been shown to be effective, they do not scale well
+ to very large training sets, or to training sets that vary over time, e.g.,
+ streaming audio or video signals.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -318,10 +350,6 @@ key "Zhao2011"
 
  have shown that online algorithms are robust to concept drift precisely
  because they permit the dictionary to adapt to new phenomena.
-\end_layout
-
-\begin_layout Subsection
-Why we prefer sparsity - Sean
 \end_layout
 
 \begin_layout Section
