@@ -753,15 +753,48 @@ Structure of an audio signal
 \end_layout
 
 \begin_layout Standard
+We now consider the problem of creating a digital representation of an (analog)
+ audio signal.
+ The signal is continuous as a function of time, so to digitize it we take
+ discrete 
+\emph on
+samples
+\emph default
+.
+ Each sample quantizes the 
+\emph on
+amplitude
+\emph default
+ of the signal at a point in time.
+ The 
+\emph on
+sampling rate
+\emph default
+ is the average number of samples obtained in one second.
+ The resolution of each sample corresponds to the number of possible values
+ of the amplitude, which is given by the 
+\emph on
+bit depth
+\emph default
+.
+ We may also consider the number of 
+\emph on
+channels
+\emph default
+ used to represent a signal, each of which corresponds to a separate data
+ stream that must be sampled.
+\end_layout
+
+\begin_layout Subsection
+What kind of dictionary could we learn for an audio signal
+\end_layout
+
+\begin_layout Standard
 why might we want to do online learning for an audio signal (consider a
  stream, or a huge data set, or whatever), but biggest idea is that online
  learning allows us to detect unusual events (if we learn on the whole data
  set, then possibly our dictionary will learn the unusual events, impeding
  our ability to identify them)
-\end_layout
-
-\begin_layout Subsection
-What kind of dictionary could we learn for an audio signal
 \end_layout
 
 \begin_layout Standard
@@ -786,6 +819,21 @@ Change in meter, key change, whatever
 
 \begin_layout Subsection
 Test case - Meredith/Sean
+\end_layout
+
+\begin_layout Standard
+We consider the song 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ by Queen.
+ For simplicity, we store the signal in the Waveform Audio File Format (WAV)
+ with a sampling rate of 16,000 Hz, a bit depth of 16, and a single, i.e.,
+ monaural, channel.
 \end_layout
 
 \begin_layout Standard
