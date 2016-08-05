@@ -332,14 +332,19 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Methodology - Courtney to start
+Methodology
 \end_layout
 
 \begin_layout Standard
 A learning dictionary algorithm from 
-\backslash
-cite{Mairel09} has been implemented to identify unusual events that occur
- in the song, "Bohemian Rhaspody," by Queen.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ has been implemented to identify unusual events that occur in the song,
+ "Bohemian Rhaspody," by Queen.
  The first user defined t seconds are used to define the initial dictionary
  with the sparse coding algorithm.
  The algorithm employs a sliding window technique that moves through the
@@ -423,26 +428,15 @@ status open
 
 
 \backslash
-caption{Online Dictionary Learning 
-\backslash
-cite{Mairel09}}
+caption{Online Dictionary Learning }
 \end_layout
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{algorithmic}
-\end_layout
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
 
 \end_inset
 
@@ -466,7 +460,7 @@ REQUIRE:
 \uwave off
 \noun off
 \color none
- (event)~p(x) (algorithm to drawsamples),
+ (event)~p(x) (algorithm to draw samples),
 \begin_inset Formula $\lambda\in\R$
 \end_inset
 
@@ -631,28 +625,8 @@ RETURN
  (learned dictionary).
 \end_layout
 
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{algorithmic}
-\end_layout
-
 \end_inset
 
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 
 \end_layout
 

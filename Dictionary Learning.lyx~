@@ -4,8 +4,24 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass amsart
+\begin_preamble
+\allowdisplaybreaks
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\dif}{d}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\usepackage{algpseudocode}
+\end_preamble
 \use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+knitr
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -27,10 +43,11 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
-\use_package amsmath 1
+\use_geometry true
+\use_package amsmath 2
 \use_package amssymb 1
 \use_package cancel 1
 \use_package esint 1
@@ -53,6 +70,10 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -84,20 +105,6 @@ Meredith Miller
 \end_inset
 
 Sean Wilson
-\end_layout
-
-\begin_layout Abstract
-Sparse representation of a natural signal in terms of a dictionary learned
- from the signal itself has been shown to be highly effective.
- Online methods for dictionary learning mitigate scalability issues with
- traditional batch learning methods, and offer the ability to learn dictionaries
- for streaming signals.
- We review the key concepts of sparse dictionary learning and important
- results related to the online extension of such methods.
- We show that online dictionary learning can be used to detect unusual events
- in audio signals, such as a change in meter or the appearance of a new
- instrument, and that such methods are robust to concept drift in the target
- signal.
 \end_layout
 
 \begin_layout Section
@@ -212,28 +219,6 @@ A signal
 \end_inset
 
 .
- A sparse representation of 
-\begin_inset Formula $\mathbf{x}$
-\end_inset
-
- may be preferable to a 
-\begin_inset Quotes eld
-\end_inset
-
-dense
-\begin_inset Quotes erd
-\end_inset
-
- representation (assuming that both representations have similar reconstruction
- performance) for two primary reasons.
- The first is the principle of parsimony (or model interpretability): if
- we can represent the signal with relatively few atoms (the coefficients
- of the remaining atoms being zero), our understanding of the signal is
- easier to characterize than if we had to interpret the effects of a larger
- number of atoms.
- I.e., we have identified redundancy in the atoms relative to the signal.
- The second is computational efficiency: fewer nonzero coefficients means
- that we can represent and manipulate the signal using fewer resources.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -259,7 +244,11 @@ dictionary learning
 \begin_inset Formula $\mathbf{x}$
 \end_inset
 
- has a sparse representation in terms of the atoms of 
+ has a 
+\begin_inset Formula $k$
+\end_inset
+
+-sparse representation in terms of the atoms of 
 \begin_inset Formula $\mathcal{D}$
 \end_inset
 
@@ -273,14 +262,14 @@ Online learning
 \begin_layout Standard
 A dictionary is typically learned from a training set (possibly the signal
  to be reconstructed) using a constrained optimization procedure.
- We can implement this optimization as a 
+ Implementing this optimization as a 
 \emph on
 batch
 \emph default
- procedure, wherein the entire training set is used at each iteration.
- While such methods have been shown to be effective, they do not scale well
- to very large training sets, or to training sets that vary over time, e.g.,
- streaming audio or video signals.
+ procedure, wherein the entire training set is used, has proved effective
+ [citation? see Lee et al 2007], it does not scale well to very large training
+ sets, or to training sets that vary over time, e.g., streaming audio or video
+ signals.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -331,86 +320,38 @@ key "Zhao2011"
  because they permit the dictionary to adapt to new phenomena.
 \end_layout
 
+\begin_layout Subsection
+Why we prefer sparsity - Sean
+\end_layout
+
 \begin_layout Section
 Methodology - Courtney to start
 \end_layout
 
 \begin_layout Standard
-A learning dictionary algorithm from 
-\backslash
-cite{Mairel09} has been implemented to identify unusual events that occur
- in the song, "Bohemian Rhaspody," by Queen.
- The first user defined t seconds are used to define the initial dictionary
- with the sparse coding algorithm.
- The algorithm employs a sliding window technique that moves through the
- song to identify events, t second portions of the song.
- These events are stored as a set of vectors, 
-\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
-\end_inset
-
-.
- Each event is examined in the algorithm to detect changes in the song that
- differ from the previous dictionary and learns new patterns that then updates
- the dictionary 
-\begin_inset Formula ${\bf D}$
-\end_inset
-
- online.
- Additionally, a reconstruction weight vector is learned for each event.
- This weight vector is used to calculate the mean squared error.
- 
+equations, formal statement of algorithm for online dictionary learning,
+ probably similar to Mairal.
 \end_layout
 
 \begin_layout Standard
-We wish to optimize the following cost function: 
-\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
-\end_inset
-
-, where 
-\begin_inset Formula $l(x_{i},{\bf D)}$
-\end_inset
-
- is the loss function.
- Each column in $
-\backslash
-bf{D}$ is a basis vector.
- Minimizing the loss functions leaves us with the following problem: 
-\begin_inset Formula 
-\begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\R^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
-\end{equation}
-
-\end_inset
-
- where 
-\begin_inset Formula $\lambda$
-\end_inset
-
- is the regularization parameter.
- This is essentially basis pursuit.
- It is important to note that this equation is only convex with respect
- to either 
-\begin_inset Formula ${\bf D}$
-\end_inset
-
- or 
-\begin_inset Formula ${\bf \alpha}$
-\end_inset
-
- while the other is fixed.
- Stochatic gradient descent is used to make updates to the dictionary: 
-\begin_inset Formula 
-\begin{equation}
-{\bf D_{t}=\prod_{C}\left[{\bf D_{t-1}-\frac{\rho}{t}\bigtriangledown Dl(x_{i},{\bf D_{t-1}}}\right].}
-\end{equation}
+This is how to add a reference (Insert > Citation):
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+This is how to add an algorithm float.
+ See LaTeX preamble for algpseudocode.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float algorithm
+placement h
 wide false
 sideways false
 status open
@@ -423,9 +364,7 @@ status open
 
 
 \backslash
-caption{Online Dictionary Learning 
-\backslash
-cite{Mairel09}}
+begin{algorithmic}[1]
 \end_layout
 
 \end_inset
@@ -441,95 +380,10 @@ status open
 
 
 \backslash
-begin{algorithmic}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-REQUIRE: 
-\begin_inset Formula ${\bf x}\in\R^{m}$
-\end_inset
-
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
- (event)~p(x) (algorithm to drawsamples),
-\begin_inset Formula $\lambda\in\R$
-\end_inset
-
- (regularization parameter),
-\begin_inset Formula ${\bf D_{0}\in\R^{mxk}}$
-\end_inset
-
- (initial dictionary), T (number of iterations).
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Formula $A_{0}\leftarrow0$
-\end_inset
-
-, 
-\begin_inset Formula $B_{0}\leftarrow0$
-\end_inset
-
- (reset the "past" information)
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
+Function{fft}{$
 \backslash
-FOR FOR {t=1 to T} 
+mathbf{x},n$}
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-Draw 
-\begin_inset Formula $x_{i}$
-\end_inset
-
- from p(x).
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-STATE Sparse coding: compuse using LARS
-\end_layout
-
-\end_inset
-
-
-\begin_inset Formula 
-\begin{equation}
-\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\R^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
-\end{equation}
 
 \end_inset
 
@@ -544,17 +398,68 @@ status open
 
 
 \backslash
-STATE 
+If{$n=1$}
 \end_layout
 
 \end_inset
 
 
-\begin_inset Formula $A_{t}\leftarrow A_{t-1}+\alpha_{t}\alpha_{t}^{T}$
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\backslash
+Return{$
+\backslash
+mathbf{x}$}
+\end_layout
+
 \end_inset
 
-.
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Else
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
  
+\begin_inset Formula $\mathbf{x}^{\text{even}}\gets\begin{bmatrix}x_{0} & x_{2} & \cdots & x_{n-2}\end{bmatrix}^{\mathsf{T}}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -565,16 +470,22 @@ status open
 
 
 \backslash
-STATE
+State $
+\backslash
+mathbf{v}
+\backslash
+gets$ 
+\backslash
+Call{fft}{$
+\backslash
+mathbf{x}^{
+\backslash
+text{even}},n/2$}
 \end_layout
 
 \end_inset
 
 
-\begin_inset Formula $B_{t}\leftarrow B_{t-1}+x_{t}\alpha_{t}^{T}$
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Plain Layout
@@ -585,24 +496,38 @@ status open
 
 
 \backslash
-STATE 
+State
 \end_layout
 
 \end_inset
 
-Compute 
-\begin_inset Formula ${\bf D_{t}}$
+ 
+\begin_inset Formula $\mathbf{x}^{\text{odd}}\gets\begin{bmatrix}x_{1} & x_{3} & \cdots & x_{n-1}\end{bmatrix}^{\mathsf{T}}$
 \end_inset
 
- using Algorithm 2 with 
-\begin_inset Formula ${\bf D_{t-1}}$
-\end_inset
 
- as warm restart, so that 
-\begin_inset Formula 
-\begin{equation}
-{\bf D_{t}}\triangleq{\displaystyle \min_{{\bf D\in C}}\frac{1}{t}{\displaystyle \sum_{i=1}^{t}\frac{1}{2}\Vert x_{i}-{\bf D\alpha_{i}\Vert_{2}^{2}+\lambda\Vert\alpha_{i}\Vert_{1}}}}={\displaystyle \min_{{\bf D\in C}}\frac{1}{t}\left(\frac{1}{2}Tr({\bf D^{T}{\bf DA_{t})-Tr({\bf D^{T}B_{t})}}}\right).}
-\end{equation}
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State $
+\backslash
+mathbf{w}
+\backslash
+gets$ 
+\backslash
+Call{fft}{$
+\backslash
+mathbf{x}^{
+\backslash
+text{odd}},n/2$}
+\end_layout
 
 \end_inset
 
@@ -615,7 +540,21 @@ status open
 
 \begin_layout Plain Layout
 
-END FOR 
+
+\backslash
+For{$j
+\backslash
+in
+\backslash
+left
+\backslash
+{0,1,
+\backslash
+ldots,n/2-1
+\backslash
+right
+\backslash
+}$}
 \end_layout
 
 \end_inset
@@ -624,11 +563,109 @@ END FOR
 \end_layout
 
 \begin_layout Plain Layout
-RETURN 
-\begin_inset Formula ${\bf D_{T}}$
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
 \end_inset
 
- (learned dictionary).
+ 
+\begin_inset Formula $y_{j}\gets v_{j}+\mathrm{e}^{-2\pi\iota\cdot j/n}\cdot w_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $y_{j+n/2}\gets v_{j}-\mathrm{e}^{-2\pi\iota\cdot j/n}\cdot w_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{y}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndIf
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFunction
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -647,12 +684,20 @@ end{algorithmic}
 
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Fast Fourier Transform
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\end_inset
+
 
 \end_layout
 
@@ -680,48 +725,15 @@ Structure of an audio signal
 \end_layout
 
 \begin_layout Standard
-We now consider the problem of creating a digital representation of an (analog)
- audio signal.
- The signal is continuous as a function of time, so to digitize it we take
- discrete 
-\emph on
-samples
-\emph default
-.
- Each sample quantizes the 
-\emph on
-amplitude
-\emph default
- of the signal at a point in time.
- The 
-\emph on
-sampling rate
-\emph default
- is the average number of samples obtained in one second.
- The resolution of each sample corresponds to the number of possible values
- of the amplitude, which is given by the 
-\emph on
-bit depth
-\emph default
-.
- We may also consider the number of 
-\emph on
-channels
-\emph default
- used to represent a signal, each of which corresponds to a separate data
- stream that must be sampled.
-\end_layout
-
-\begin_layout Subsection
-What kind of dictionary could we learn for an audio signal
-\end_layout
-
-\begin_layout Standard
 why might we want to do online learning for an audio signal (consider a
  stream, or a huge data set, or whatever), but biggest idea is that online
  learning allows us to detect unusual events (if we learn on the whole data
  set, then possibly our dictionary will learn the unusual events, impeding
  our ability to identify them)
+\end_layout
+
+\begin_layout Subsection
+What kind of dictionary could we learn for an audio signal
 \end_layout
 
 \begin_layout Standard
@@ -746,21 +758,6 @@ Change in meter, key change, whatever
 
 \begin_layout Subsection
 Test case - Meredith/Sean
-\end_layout
-
-\begin_layout Standard
-We consider the song 
-\begin_inset Quotes eld
-\end_inset
-
-Bohemian Rhapsody
-\begin_inset Quotes erd
-\end_inset
-
- by Queen.
- For simplicity, we store the signal in the Waveform Audio File Format (WAV)
- with a sampling rate of 16,000 Hz, a bit depth of 16, and a single, i.e.,
- monaural, channel.
 \end_layout
 
 \begin_layout Standard
@@ -956,7 +953,7 @@ how did the algorithm perform, how could it be extended
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "dict-learn/library"
+bibfiles "library"
 options "apalike"
 
 \end_inset
