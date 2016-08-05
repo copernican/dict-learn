@@ -4,8 +4,24 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass amsart
+\begin_preamble
+\allowdisplaybreaks
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\dif}{d}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\usepackage{algpseudocode}
+\end_preamble
 \use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+knitr
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -27,10 +43,11 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
-\use_package amsmath 1
+\use_geometry true
+\use_package amsmath 2
 \use_package amssymb 1
 \use_package cancel 1
 \use_package esint 1
@@ -53,6 +70,10 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 1.5in
+\topmargin 1.5in
+\rightmargin 1.5in
+\bottommargin 1.5in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -337,9 +358,14 @@ Methodology - Courtney to start
 
 \begin_layout Standard
 A learning dictionary algorithm from 
-\backslash
-cite{Mairel09} has been implemented to identify unusual events that occur
- in the song, "Bohemian Rhaspody," by Queen.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ has been implemented to identify unusual events that occur in the song,
+ "Bohemian Rhaspody," by Queen.
  The first user defined t seconds are used to define the initial dictionary
  with the sparse coding algorithm.
  The algorithm employs a sliding window technique that moves through the
@@ -371,13 +397,15 @@ We wish to optimize the following cost function:
 \end_inset
 
  is the loss function.
- Each column in $
-\backslash
-bf{D}$ is a basis vector.
+ Each column in 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is a basis vector.
  Minimizing the loss functions leaves us with the following problem: 
 \begin_inset Formula 
 \begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\R^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
+{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
 \end{equation}
 
 \end_inset
@@ -411,6 +439,7 @@ bf{D}$ is a basis vector.
 
 \begin_layout Standard
 \begin_inset Float algorithm
+placement h
 wide false
 sideways false
 status open
@@ -423,9 +452,7 @@ status open
 
 
 \backslash
-caption{Online Dictionary Learning 
-\backslash
-cite{Mairel09}}
+begin{algorithmic}[1]
 \end_layout
 
 \end_inset
@@ -441,17 +468,13 @@ status open
 
 
 \backslash
-begin{algorithmic}
+State
 \end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-REQUIRE: 
-\begin_inset Formula ${\bf x}\in\R^{m}$
+ REQUIRE: 
+\begin_inset Formula ${\bf x}\in\mathbb{R}^{m}$
 \end_inset
 
 
@@ -467,11 +490,11 @@ REQUIRE:
 \noun off
 \color none
  (event)~p(x) (algorithm to drawsamples),
-\begin_inset Formula $\lambda\in\R$
+\begin_inset Formula $\lambda\in\mathbb{R}$
 \end_inset
 
  (regularization parameter),
-\begin_inset Formula ${\bf D_{0}\in\R^{mxk}}$
+\begin_inset Formula ${\bf D_{0}\in\mathbb{R}^{mxk}}$
 \end_inset
 
  (initial dictionary), T (number of iterations).
@@ -496,7 +519,7 @@ status open
 
 
 \backslash
-FOR FOR {t=1 to T} 
+For{$t=1$ to $T$}
 \end_layout
 
 \end_inset
@@ -505,7 +528,19 @@ FOR FOR {t=1 to T}
 \end_layout
 
 \begin_layout Plain Layout
-Draw 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Draw 
 \begin_inset Formula $x_{i}$
 \end_inset
 
@@ -520,15 +555,15 @@ status open
 
 
 \backslash
-STATE Sparse coding: compuse using LARS
+State
 \end_layout
 
 \end_inset
 
-
+ Sparse coding: compuse using LARS
 \begin_inset Formula 
 \begin{equation}
-\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\R^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
+\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\mathbb{R}^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
 \end{equation}
 
 \end_inset
@@ -544,12 +579,12 @@ status open
 
 
 \backslash
-STATE 
+State
 \end_layout
 
 \end_inset
 
-
+ 
 \begin_inset Formula $A_{t}\leftarrow A_{t-1}+\alpha_{t}\alpha_{t}^{T}$
 \end_inset
 
@@ -565,12 +600,12 @@ status open
 
 
 \backslash
-STATE
+State
 \end_layout
 
 \end_inset
 
-
+ 
 \begin_inset Formula $B_{t}\leftarrow B_{t-1}+x_{t}\alpha_{t}^{T}$
 \end_inset
 
@@ -585,12 +620,12 @@ status open
 
 
 \backslash
-STATE 
+State
 \end_layout
 
 \end_inset
 
-Compute 
+ Compute 
 \begin_inset Formula ${\bf D_{t}}$
 \end_inset
 
@@ -615,7 +650,9 @@ status open
 
 \begin_layout Plain Layout
 
-END FOR 
+
+\backslash
+EndFor
 \end_layout
 
 \end_inset
@@ -624,11 +661,21 @@ END FOR
 \end_layout
 
 \begin_layout Plain Layout
-RETURN 
-\begin_inset Formula ${\bf D_{T}}$
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{D}_{t}$ (learned dictionary)}
+\end_layout
+
 \end_inset
 
- (learned dictionary).
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -647,12 +694,20 @@ end{algorithmic}
 
 \end_layout
 
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Online dictionary learning
+\end_layout
+
 \end_inset
 
 
 \end_layout
 
-\begin_layout Standard
+\end_inset
+
 
 \end_layout
 
@@ -815,7 +870,7 @@ status open
 
 \begin_layout Plain Layout
 
-library(knitron)
+# library(knitron)
 \end_layout
 
 \begin_layout Plain Layout
@@ -956,7 +1011,7 @@ how did the algorithm perform, how could it be extended
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "dict-learn/library"
+bibfiles "library"
 options "apalike"
 
 \end_inset
