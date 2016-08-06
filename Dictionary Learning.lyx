@@ -197,7 +197,7 @@ key "Elad2006"
 
 \begin_layout Standard
 A signal 
-\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{n}$
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{m}$
 \end_inset
 
  is said to have a 
@@ -209,7 +209,7 @@ A signal
 -sparse representation
 \emph default
  in a dictionary 
-\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{v}_{i}\right\} _{i\in\mathcal{I}}\subset\mathbb{R}^{n}$
+\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{v}_{i}\right\} _{i\in\mathcal{I}}\subset\mathbb{R}^{m}$
 \end_inset
 
  if there is a system of coefficients 
@@ -353,99 +353,195 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Methodology - Courtney to start
+Methodology
 \end_layout
 
 \begin_layout Standard
-HERE IS THE CHEN CITATION, JUST COPY AND PASTE IT WHERE YOU NEED IT
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Chen1998"
+Suppose that we wish to learn a dictionary for a signal 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{m}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ be the matrix whose columns are the atoms (basis vectors) of the dictionary,
+ and consider the loss function
+\begin_inset Formula 
+\[
+l\left(\mathbf{x,}\mathbf{D}\right)\coloneqq\min_{\boldsymbol{\alpha}\in\mathbb{R}^{k}}\frac{1}{2}\left\Vert \mathbf{x}-\mathbf{D}\boldsymbol{\alpha}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}\right\Vert _{1},
+\]
 
 \end_inset
 
+which is known as the Least Absolute Shrinkage and Selection Operator (LASSO),
+ and where 
+\begin_inset Formula $\lambda$
+\end_inset
 
+ is a regularization parameter.
+ We see that 
+\begin_inset Formula $l\left(\mathbf{x},\mathbf{D}\right)$
+\end_inset
+
+ optimizes the sum of the squared error in reconstructing 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ using the dictionary 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ and the 1-norm of the coefficient vector 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+.
+ To avoid arbitrarily small values of 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+, we adopt the constraint that the basis vectors 
+\begin_inset Formula $\left\{ \mathbf{d}_{j}\right\} _{j=1}^{k}$
+\end_inset
+
+ have 2-norm of at most one.
+ Let 
+\begin_inset Formula $\mathcal{C}$
+\end_inset
+
+ be the set of matrices satisfying this constraint, i.e., 
+\begin_inset Formula 
+\[
+\mathcal{C}\coloneqq\left\{ \mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right):\left\Vert \mathbf{d}_{j}\right\Vert _{2}\leq1\ \forall j\in\left\{ 1,2,\ldots,k\right\} \right\} ,
+\]
+
+\end_inset
+
+so that the optimization becomes
+\begin_inset Formula 
+\begin{equation}
+\min_{\mathbf{D}\in\mathcal{C},\boldsymbol{\alpha}\in\mathbb{R}^{k}}\frac{1}{2}\left\Vert \mathbf{x}-\mathbf{D}\boldsymbol{\alpha}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}\right\Vert _{1}.\label{eq:lasso}
+\end{equation}
+
+\end_inset
+
+While this problem is not jointly convex, it is convex with respect to 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+ separately, so that a solution may be obtained by alternately optimizing
+ one variable while the other is held constant, as proposed by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Lee2007"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-A learning dictionary algorithm from 
+Now suppose that we wish to learn a dictionary to represent a set of signals
+ 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}\right\} _{i=1}^{n}$
+\end_inset
+
+, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is possibly unknown, as in the case of a streaming signal.
+ Then, the optimization 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:lasso"
+
+\end_inset
+
+ becomes
+\begin_inset Formula 
+\[
+\min_{\mathbf{D}\in\mathcal{C},\boldsymbol{\alpha}\in\mathbf{M}_{k,n}\left(\mathbb{R}\right)}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\left\Vert \mathbf{x}_{i}-\mathbf{D}\boldsymbol{\alpha}_{i}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}_{i}\right\Vert _{1}\right),
+\]
+
+\end_inset
+
+which is equation (4) from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
 
 \end_inset
 
- has been implemented to identify unusual events that occur in the song,
- "Bohemian Rhaspody," by Queen.
- The first user defined t seconds are used to define the initial dictionary
- with the sparse coding algorithm.
- The algorithm employs a sliding window technique that moves through the
- song to identify events, t second portions of the song.
- These events are stored as a set of vectors, 
-\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
+.
+ The same authors propose a 
+\emph on
+mini-batch
+\emph default
+ extension of their algorithm 1 that considers 
+\begin_inset Formula $\eta>1$
+\end_inset
+
+ signals at each iteration 
+\begin_inset Formula $t\in\left\{ 1,2,\ldots T\right\} $
 \end_inset
 
 .
- Each event is examined in the algorithm to detect changes in the song that
- differ from the previous dictionary and learns new patterns that then updates
- the dictionary 
-\begin_inset Formula ${\bf D}$
+ We adopt this mini-batch method to process a streaming signal 
+\begin_inset Formula $\eta$
 \end_inset
 
- online.
- Additionally, a reconstruction weight vector is learned for each event.
- This weight vector is used to calculate the mean squared error.
- 
-\end_layout
-
-\begin_layout Standard
-We wish to optimize the following cost function: 
-\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+ samples at a time, alternating between optimizing 
+\begin_inset Formula $\boldsymbol{\alpha}$
 \end_inset
 
-, where 
-\begin_inset Formula $l(x_{i},{\bf D)}$
-\end_inset
-
- is the loss function.
- Each column in 
+ and 
 \begin_inset Formula $\mathbf{D}$
 \end_inset
 
- is a basis vector.
- Minimizing the loss functions leaves us with the following problem: 
-\begin_inset Formula 
-\begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
-\end{equation}
+.
+ As in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
 
 \end_inset
 
- where 
-\begin_inset Formula $\lambda$
+, we will learn an initial dictionary 
+\begin_inset Formula $\mathbf{D}_{0}$
 \end_inset
 
- is the regularization parameter.
- This is essentially basis pursuit.
- It is important to note that this equation is only convex with respect
- to either 
-\begin_inset Formula ${\bf D}$
+ using the first 
+\begin_inset Formula $N$
 \end_inset
 
- or 
-\begin_inset Formula ${\bf \alpha}$
+ samples of the signal, then use a 
+\emph on
+sliding window
+\emph default
+ to obtain the samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t\right)}\right\} _{i=1}^{\eta}$
 \end_inset
 
- while the other is fixed.
- Stochatic gradient descent is used to make updates to the dictionary: 
-\begin_inset Formula 
-\begin{equation}
-\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
-\end{equation}
+ for each iteration 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:online-dict-learning"
 
 \end_inset
 
-
+ presents our approach.
 \end_layout
 
 \begin_layout Standard
@@ -479,13 +575,13 @@ status open
 
 
 \backslash
-State
+Require
 \end_layout
 
 \end_inset
 
- REQUIRE: 
-\begin_inset Formula ${\bf x}\in\mathbb{R}^{m}$
+ 
+\begin_inset Formula $\left\{ {\bf x}_{i}\right\} _{i=1}^{n}\in\mathbb{R}^{m}$
 \end_inset
 
 
@@ -500,26 +596,19 @@ State
 \uwave off
 \noun off
 \color none
- (event)~p(x) (algorithm to drawsamples),
+ (set of signals), 
 \begin_inset Formula $\lambda\in\mathbb{R}$
 \end_inset
 
- (regularization parameter),
-\begin_inset Formula ${\bf D_{0}\in\mathbb{R}^{mxk}}$
+ (regularization parameter), 
+\begin_inset Formula $\mathbf{D}_{0}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
 \end_inset
 
- (initial dictionary), T (number of iterations).
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Formula $A_{0}\leftarrow0$
+ (initial dictionary), 
+\begin_inset Formula $T$
 \end_inset
 
-, 
-\begin_inset Formula $B_{0}\leftarrow0$
-\end_inset
-
- (reset the "past" information)
+ (number of iterations).
 \end_layout
 
 \begin_layout Plain Layout
@@ -709,6 +798,12 @@ end{algorithmic}
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:online-dict-learning"
+
+\end_inset
+
 Online dictionary learning
 \end_layout
 
@@ -716,6 +811,87 @@ Online dictionary learning
 
 
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A learning dictionary algorithm from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ has been implemented to identify unusual events that occur in the song,
+ "Bohemian Rhaspody," by Queen.
+ The first user defined t seconds are used to define the initial dictionary
+ with the sparse coding algorithm.
+ The algorithm employs a sliding window technique that moves through the
+ song to identify events, t second portions of the song.
+ These events are stored as a set of vectors, 
+\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
+\end_inset
+
+.
+ Each event is examined in the algorithm to detect changes in the song that
+ differ from the previous dictionary and learns new patterns that then updates
+ the dictionary 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+ online.
+ Additionally, a reconstruction weight vector is learned for each event.
+ This weight vector is used to calculate the mean squared error.
+ 
+\end_layout
+
+\begin_layout Standard
+We wish to optimize the following cost function: 
+\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+\end_inset
+
+, where 
+\begin_inset Formula $l(x_{i},{\bf D)}$
+\end_inset
+
+ is the loss function.
+ Each column in 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is a basis vector.
+ Minimizing the loss functions leaves us with the following problem: 
+\begin_inset Formula 
+\begin{equation}
+{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
+\end{equation}
+
+\end_inset
+
+ where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the regularization parameter.
+ This is essentially basis pursuit.
+ It is important to note that this equation is only convex with respect
+ to either 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+ or 
+\begin_inset Formula ${\bf \alpha}$
+\end_inset
+
+ while the other is fixed.
+ Stochatic gradient descent is used to make updates to the dictionary: 
+\begin_inset Formula 
+\begin{equation}
+\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
+\end{equation}
 
 \end_inset
 
