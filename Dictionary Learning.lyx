@@ -357,6 +357,17 @@ Methodology - Courtney to start
 \end_layout
 
 \begin_layout Standard
+HERE IS THE CHEN CITATION, JUST COPY AND PASTE IT WHERE YOU NEED IT
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Chen1998"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 A learning dictionary algorithm from 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -429,7 +440,7 @@ We wish to optimize the following cost function:
  Stochatic gradient descent is used to make updates to the dictionary: 
 \begin_inset Formula 
 \begin{equation}
-{\bf D_{t}=\prod_{C}\left[{\bf D_{t-1}-\frac{\rho}{t}\bigtriangledown Dl(x_{i},{\bf D_{t-1}}}\right].}
+\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
 \end{equation}
 
 \end_inset
@@ -865,12 +876,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup, echo = F>>=
+<<setup, echo = F, eval = F>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-# library(knitron)
+library(knitron)
 \end_layout
 
 \begin_layout Plain Layout
@@ -900,8 +911,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<example, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align = 'center',
- fig.pos = 'h', fig.cap = 'figure caption'>>=
+<<example, eval = F, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align
+ = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
 \end_layout
 
 \begin_layout Plain Layout
