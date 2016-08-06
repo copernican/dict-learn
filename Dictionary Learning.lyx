@@ -914,7 +914,7 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Application - TBD after code done
+Application
 \end_layout
 
 \begin_layout Subsection
@@ -925,14 +925,12 @@ Overview
 To test the strengths of online dictionary learning for detecting change
  points, we applied the concept of initial dictionary learning with sequential
  dictionary update to an audio signal.
- The hypothesis in this test application is that: (1) reconstruction of
- a signal window with the dictionary learned prior to that window will perform
- poorly if new elements were encountered (e.g.
- new instruments, key changes, etc.) in that window and result in a spike
- in the reconstruction error; (2) online updates of the dictionary would
- increase the performance of change point detection by emphasizing the frequent
- features of the signal more than the infrequent while inherently allowing
- major temporal shifts.
+ We hypothesize that the reconstruction of a signal window with the dictionary
+ learned prior will perform poorly if new elements were encountered during
+ that window (e.g.
+ new instruments, key changes, etc.).
+ This will result in a spike in the reconstruction error for that window,
+ allowing for the identification of change points.
  Of note is that while we chose to use an audio signal in this application,
  no aspect of the algorithm is specifically designed for audio and the learning
  is entirely unsupervised, so these concepts can be just as readily adapted
@@ -949,16 +947,32 @@ Bohemian Rhapsody
  style, range, and tempo.
 \end_layout
 
+\begin_layout Standard
+Online dictionary learning seems well suited to this application since the
+ sequential updates to the dictionary inherently provides a temporal aspect
+ to the learning and reconstruction process.
+ If a dictionary was instead learned on the entire song, the major change
+ points might be masked since the dictionary 
+\begin_inset Quotes eld
+\end_inset
+
+knows
+\begin_inset Quotes erd
+\end_inset
+
+ what comes after.
+ With online learning, however, the dictionary has no a priori information
+ on what features will be in the next signal window, so is better suited
+ to identify changes.
+\end_layout
+
 \begin_layout Subsection
-Audio Signal Structure
+Audio signal structure
 \end_layout
 
 \begin_layout Standard
-To appropriately apply online dictionary learning to an audio signal, we
- first sought to understand the underlying methodologies for encoding audio
- in a digital signal.
- Analog audio is continuous as a function of time, so to digitize it we
- take discrete 
+Analog audio is continuous as a function of time, so is digitized by taking
+ discrete 
 \emph on
 samples
 \emph default
@@ -967,11 +981,19 @@ samples
 \end_layout
 
 \begin_layout Itemize
-Each sample quantizes the 
+Each sample quantifies the 
 \emph on
 amplitude
 \emph default
- of the signal at a point in time.
+ of the signal at a point in time in a range from 
+\begin_inset Formula $-2^{15}$
+\end_inset
+
+ to 
+\begin_inset Formula $2^{15}-1$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -997,45 +1019,52 @@ The number of
 \emph on
 channels
 \emph default
- used to represent a signal, each of which corresponds to a separate data
- stream that must be sampled.
+ used to represent a signal correspond to separate data streams that must
+ be sampled.
+\end_layout
+
+\begin_layout Standard
+For our application, we obtained an uncompressed, 16,000 Hz (sampling rate),
+ 16 bit (bit depth), monoaural (channels) waveform audio file (WAV) for
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
-What kind of dictionary could we learn for an audio signal
+Unusual event identification
 \end_layout
 
 \begin_layout Standard
-why might we want to do online learning for an audio signal (consider a
- stream, or a huge data set, or whatever), but biggest idea is that online
- learning allows us to detect unusual events (if we learn on the whole data
- set, then possibly our dictionary will learn the unusual events, impeding
- our ability to identify them)
-\end_layout
+For comparison with the peaks in the reconstruction errors and assessing
+ the performance of our implementation of online learning, we examined the
+ sheet music of 
+\begin_inset Quotes eld
+\end_inset
 
-\begin_layout Standard
-maybe insert image of different waveforms, e.g., as in 
-\begin_inset CommandInset href
-LatexCommand href
-name "http://www.seaandsailor.com/dictlearning.html"
-target "http://www.seaandsailor.com/dictlearning.html"
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ for major musical changes and mapped them to timepoints in our audio, see
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "unusual_events"
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Subsection
-Defining unusual events
-\end_layout
-
-\begin_layout Standard
-Include table of unusual events (key change, meter change, new instrument
- comes in)
-\end_layout
-
-\begin_layout Standard
-The song begins in 4/4 time in the key of B-flat major.
+.
+ The song begins in 4/4 time in the key of B-flat major.
+ Only one key change occurs, but meter and instrumentation change frequently,
+ providing numerous opportunities to assess the algorithm's performance.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -1917,6 +1946,13 @@ Unusual event detection rates
 \end_inset
 
 
+\begin_inset CommandInset label
+LatexCommand label
+name "unusual_events"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -1925,21 +1961,21 @@ Unusual event detection rates
 \end_layout
 
 \begin_layout Subsection
-Test case - Meredith/Sean
+Implementation
 \end_layout
 
 \begin_layout Standard
-To test the strengths of online dictionary learning in detecting change
- points in an audio signal, we used Python's scikit learning library, which
- contains implementations of the algorithms described by 
+The algorithms designed and discussed in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
 
 \end_inset
 
-.
- Our implementation combined and modified the two methodologies of 
+ have been included in Python's scikit learning library, in the decomposition
+ module (citation), so could be readily utilized for our application.
+ However, our use case required a hybrid implementation of the two methodologies
+ of 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
@@ -1955,29 +1991,41 @@ key "Zhao2011"
 
 .
  
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
 
 \end_inset
 
- contained the description and recommendations for applying these concepts
- to vector data (by vectorizing image data), which matches the format of
- the monoaural channel audio signal involved in this effort.
- However, the implementation in 
+ contained the description and recommendations for applying the basic online
+ learning framework to vector data (by vectorizing image data), similar
+ to the format of the monoaural channel audio signal involved in this effort,
+ but utilized random sampling of the images.
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Zhao2011"
 
 \end_inset
 
-specifically addressed the constraint that the audio signal is structured
- in time and should not be randomly sampled, but instead processed using
- a sliding window.
- Further guidance was provided by seaandsailor implementation, which directly
- processed speech sample audio for reconstruction performance.
+ used online learning to detect unusual events in video, paralleling our
+ application well, and detailed the use of a sliding window during processing,
+ rather than random samples.
+ Further guidance was provided by João Felipe Santos' application of online
+ learning to speech samples (citation), which directly addressed processing
+ audio.
  The final Python code is contained in Appendix A, but the basic structure
- is detailed in the pseudocode below:
+ is detailed in the pseudocode of Algorithm 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "pseudo_python"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2197,7 +2245,7 @@ State
 \end_inset
 
  
-\begin_inset Formula $T=(m-n)/(16,000*w)$
+\begin_inset Formula $T=(m-n)/(16,000w)$
 \end_inset
 
 , where 
@@ -2411,8 +2459,15 @@ end{algorithmic}
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Online dictionary learning
+Change Point Detection with Online Dictionary Learning
 \end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "pseudo_python"
 
 \end_inset
 
@@ -2425,143 +2480,7 @@ Online dictionary learning
 \end_layout
 
 \begin_layout Standard
-Several concerns were addressed in the development of this final implementation
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<setup, echo = F, eval = F>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-# library(knitron)
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We are now ready to run some Python code.
- Notice chunk option engine = 'ipython'.
- You'll need to install scipy, matplotlib, and numpy, which can be done
- with pip3 install scipy, matplotlib (numpy is a scipy dependency).
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<example, eval = F, engine = 'python', fig.height = 3, fig.width = 5, fig.align
- = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-# knitron already imports matplotlib for us
-\end_layout
-
-\begin_layout Plain Layout
-
-# import matplotlib.pyplot as plt
-\end_layout
-
-\begin_layout Plain Layout
-
-import scipy as sc
-\end_layout
-
-\begin_layout Plain Layout
-
-import numpy as np
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-# Load signal used to build the dictionary
-\end_layout
-
-\begin_layout Plain Layout
-
-from scipy.io import wavfile
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-import os
-\end_layout
-
-\begin_layout Plain Layout
-
-# fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
-\end_layout
-
-\begin_layout Plain Layout
-
-# data = data / 2.0**15
-\end_layout
-
-\begin_layout Plain Layout
-
-# print(data.shape)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-# plt.rcParams.update({'font.size': 10})
-\end_layout
-
-\begin_layout Plain Layout
-
-         
-\end_layout
-
-\begin_layout Plain Layout
-
-# plt.plot(data[0:fs*5]) 
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+Several concerns 
 \end_layout
 
 \begin_layout Section
