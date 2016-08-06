@@ -12,6 +12,7 @@
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\dif}{d}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator{\tr}{tr}
 \usepackage{algpseudocode}
 \end_preamble
@@ -525,6 +526,10 @@ key "Zhao2011"
 \emph on
 sliding window
 \emph default
+ of width 
+\begin_inset Formula $w$
+\end_inset
+
  to obtain the samples 
 \begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t\right)}\right\} _{i=1}^{\eta}$
 \end_inset
@@ -534,6 +539,20 @@ sliding window
 \end_inset
 
 .
+ We then compute the reconstruction coefficients 
+\begin_inset Formula $\boldsymbol{\alpha}_{t}$
+\end_inset
+
+ using Orthogonal Matching Pursuit (OMP), then use these coefficients to
+ compute the updated dictionary 
+\begin_inset Formula $\mathbf{D}_{t}$
+\end_inset
+
+ using Least Angle Regression (LARS) with 
+\begin_inset Formula $\mathbf{D}_{t-1}$
+\end_inset
+
+ as a warm restart.
  Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -605,10 +624,66 @@ Require
 \end_inset
 
  (initial dictionary), 
+\begin_inset Formula $w$
+\end_inset
+
+ (sliding window width).
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Ensure
+\end_layout
+
+\end_inset
+
+ learned dictionary 
+\begin_inset Formula $\mathbf{D}_{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Calculate the number of iterations 
 \begin_inset Formula $T$
 \end_inset
 
- (number of iterations).
+ and the number of samples per iteration 
+\begin_inset Formula $\eta$
+\end_inset
+
+ based on the signal dimension 
+\begin_inset Formula $m$
+\end_inset
+
+, the number of signals 
+\begin_inset Formula $n$
+\end_inset
+
+, and the window width 
+\begin_inset Formula $w$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Plain Layout
@@ -640,73 +715,19 @@ State
 
 \end_inset
 
- Draw 
-\begin_inset Formula $x_{i}$
+ Sparse coding: compute 
+\begin_inset Formula $\boldsymbol{\alpha}_{t}$
 \end_inset
 
- from p(x).
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
+ as in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:omp"
 
 \end_inset
 
- Sparse coding: compuse using LARS
-\begin_inset Formula 
-\begin{equation}
-\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\mathbb{R}^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $A_{t}\leftarrow A_{t-1}+\alpha_{t}\alpha_{t}^{T}$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $B_{t}\leftarrow B_{t-1}+x_{t}\alpha_{t}^{T}$
+ for the samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t\right)}\right\} _{i=1}^{\eta}$
 \end_inset
 
 .
@@ -725,23 +746,15 @@ State
 
 \end_inset
 
- Compute 
-\begin_inset Formula ${\bf D_{t}}$
+ Dictionary update: compute 
+\begin_inset Formula $\mathbf{D}_{t}$
 \end_inset
 
- using Algorithm 2 with 
-\begin_inset Formula ${\bf D_{t-1}}$
+ using LARS, with 
+\begin_inset Formula $\mathbf{D}_{t-1}$
 \end_inset
 
- as warm restart, so that 
-\begin_inset Formula 
-\begin{equation}
-{\bf D_{t}}\triangleq{\displaystyle \min_{{\bf D\in C}}\frac{1}{t}{\displaystyle \sum_{i=1}^{t}\frac{1}{2}\Vert x_{i}-{\bf D\alpha_{i}\Vert_{2}^{2}+\lambda\Vert\alpha_{i}\Vert_{1}}}}={\displaystyle \min_{{\bf D\in C}}\frac{1}{t}\left(\frac{1}{2}Tr({\bf D^{T}{\bf DA_{t})-Tr({\bf D^{T}B_{t})}}}\right).}
-\end{equation}
-
-\end_inset
-
-
+ as a warm restart.
 \end_layout
 
 \begin_layout Plain Layout
@@ -770,7 +783,7 @@ status open
 \backslash
 Return{$
 \backslash
-mathbf{D}_{t}$ (learned dictionary)}
+mathbf{D}_{T}$}
 \end_layout
 
 \end_inset
@@ -804,7 +817,7 @@ name "alg:online-dict-learning"
 
 \end_inset
 
-Online dictionary learning
+Online Dictionary Learning
 \end_layout
 
 \end_inset
@@ -818,99 +831,609 @@ Online dictionary learning
 \end_layout
 
 \begin_layout Standard
-A learning dictionary algorithm from 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Mairal2009"
+Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:omp"
 
 \end_inset
 
- has been implemented to identify unusual events that occur in the song,
- "Bohemian Rhaspody," by Queen.
- The first user defined t seconds are used to define the initial dictionary
- with the sparse coding algorithm.
- The algorithm employs a sliding window technique that moves through the
- song to identify events, t second portions of the song.
- These events are stored as a set of vectors, 
-\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
+ provides the coefficient update.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}[1]
+\end_layout
+
 \end_inset
 
-.
- Each event is examined in the algorithm to detect changes in the song that
- differ from the previous dictionary and learns new patterns that then updates
- the dictionary 
-\begin_inset Formula ${\bf D}$
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Require
+\end_layout
+
 \end_inset
 
- online.
- Additionally, a reconstruction weight vector is learned for each event.
- This weight vector is used to calculate the mean squared error.
  
+\begin_inset Formula $\left\{ {\bf x}_{i}\right\} _{i=1}^{\eta}\in\mathbb{R}^{m}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ (set of samples), 
+\begin_inset Formula $\lambda\in\mathbb{R}$
+\end_inset
+
+ (tolerance parameter), 
+\begin_inset Formula $\mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ (unit-norm dictionary).
 \end_layout
 
-\begin_layout Standard
-We wish to optimize the following cost function: 
-\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Ensure
+\end_layout
+
+\end_inset
+
+ coefficients 
+\begin_inset Formula $\boldsymbol{\alpha}\in\mathbf{M}_{k,\eta}\left(\mathbb{R}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$i=1$ to $
+\backslash
+eta$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathcal{I}\gets\emptyset$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}\gets\mathbf{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{r}=\mathbf{x}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+While{$
+\backslash
+left
+\backslash
+Vert 
+\backslash
+mathbf{r}
+\backslash
+right
+\backslash
+Vert _{2}>
+\backslash
+lambda$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $i'\gets\argmax_{j\in\left[k\right]\setminus\mathcal{I}}\left|\left\langle \mathbf{r},\mathbf{d}_{j}\right\rangle \right|$
 \end_inset
 
 , where 
-\begin_inset Formula $l(x_{i},{\bf D)}$
+\begin_inset Formula $\mathbf{d}_{j}$
 \end_inset
 
- is the loss function.
- Each column in 
+ is the 
+\begin_inset Formula $j\text{th}$
+\end_inset
+
+ column of 
 \begin_inset Formula $\mathbf{D}$
 \end_inset
 
- is a basis vector.
- Minimizing the loss functions leaves us with the following problem: 
-\begin_inset Formula 
-\begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
-\end{equation}
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
 
 \end_inset
 
- where 
-\begin_inset Formula $\lambda$
+ 
+\begin_inset Formula $\mathcal{I}\gets\mathcal{I}\cup\left\{ i'\right\} $
 \end_inset
 
- is the regularization parameter.
- This is essentially basis pursuit.
- It is important to note that this equation is only convex with respect
- to either 
-\begin_inset Formula ${\bf D}$
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
 \end_inset
 
- or 
-\begin_inset Formula ${\bf \alpha}$
+ 
+\begin_inset Formula $\mathcal{B}\gets\text{span}\left\{ \left\{ \mathbf{d}_{j}\right\} _{j\in\mathcal{I}}\right\} $
 \end_inset
 
- while the other is fixed.
- Stochatic gradient descent is used to make updates to the dictionary: 
-\begin_inset Formula 
-\begin{equation}
-\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
-\end{equation}
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}\gets\Pi_{\mathcal{B}}\left(\mathbf{x}_{i}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\Pi_{\mathcal{B}}\left(\mathbf{x}_{i}\right)$
+\end_inset
+
+ is the projection of 
+\begin_inset Formula $\mathbf{x}_{i}$
+\end_inset
+
+ onto 
+\begin_inset Formula $\mathcal{B}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{r}\gets\mathbf{x}_{i}-\boldsymbol{\alpha}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndWhile
+\end_layout
 
 \end_inset
 
 
 \end_layout
 
-\begin_layout Subsection
-Definition of unusual event / change point detection / whatever
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\boldsymbol{\alpha}\gets\frac{1}{\eta}\sum_{i=1}^{\eta}\boldsymbol{\alpha}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+boldsymbol{
+\backslash
+alpha}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:omp"
+
+\end_inset
+
+Orthogonal Matching Pursuit
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-algorithm for unusual event detection, probably similar to 
+As the window slides along the set of signals, the optimization at each
+ iteration will produce a dictionary that is 
+\emph on
+adaptive
+\emph default
+, i.e., it can learn to represent new signal behavior, and given some specified
+ number of atoms, can also 
+\begin_inset Quotes eld
+\end_inset
+
+forget
+\begin_inset Quotes erd
+\end_inset
+
+ previously observed signal behavior that becomes rare or ceases to occur
+ altogether after some specified time.
+ In this way, our approach accommodates concept drift.
+\end_layout
+
+\begin_layout Subsection
+Unusual event detection
+\end_layout
+
+\begin_layout Standard
+As the window slides along the set of signals, we will update our dictionary
+ as described in the previous section.
+ When we slide to the 
+\begin_inset Formula $\left(t+1\right)\text{th}$
+\end_inset
+
+ window composed of samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t+1\right)}\right\} _{i=1}^{\eta}$
+\end_inset
+
+, we will use our dictionary from the previous window 
+\begin_inset Formula $\mathbf{D}_{t}$
+\end_inset
+
+ to reconstruct the samples.
+ If the 
+\begin_inset Formula $\left(t+1\right)\text{th}$
+\end_inset
+
+ window is 
+\emph on
+unusual
+\emph default
+, i.e., it represents signal behavior that is either rare or novel, then our
+ dictionary will not be able to represent it accurately (the dictionary
+ will lack elements well-suited to approximating the new behavior).
+ In this case, and following 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Zhao2011"
 
 \end_inset
 
+, we expect that either a greater number of atoms will be required to reconstruc
+t the samples for a specified reconstruction error, or that the error in
+ reconstruction will increase for some desired sparsity 
+\begin_inset Formula $k$
+\end_inset
 
+.
+ In particular, we observe that this method is 
+\emph on
+unsupervised
+\emph default
+ insofar as we have given no prior definition for what constitutes an unusual
+ event; we have not even provided prior information regarding the signal
+ class.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+ determine the 
+\begin_inset Quotes eld
+\end_inset
+
+normality
+\begin_inset Quotes erd
+\end_inset
+
+ of an event 
+\begin_inset Formula $\mathbf{X}_{i}=\left\{ \mathbf{X}_{i}^{1},\ldots,\mathbf{X}_{i}^{n_{i}}\right\} $
+\end_inset
+
+ by computing the objective function 
+\begin_inset Formula 
+\[
+J\left(\mathbf{X}_{i},\boldsymbol{\alpha}_{i},\mathbf{D}\right)\coloneqq\frac{1}{2}\sum_{j=1}^{n_{i}}\left\Vert \mathbf{X}_{i}^{j}-\mathbf{D}\boldsymbol{\alpha}_{i}^{j}\right\Vert _{2}^{2}+\lambda_{1}\sum_{j=1}^{n_{i}}\left\Vert \boldsymbol{\alpha}^{j}\right\Vert _{1}+\lambda_{2}\sum_{j=1}^{n_{i}}\sum_{k=1}^{n_{i}}\mathbf{W}_{jk}\left\Vert \boldsymbol{\alpha}_{i}^{j}-\boldsymbol{\alpha}_{i}^{k}\right\Vert _{2}^{2},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left\{ \boldsymbol{\alpha}_{i}^{1},\ldots,\boldsymbol{\alpha}_{i}^{n_{i}}\right\} $
+\end_inset
+
+ are the reconstruction weight vectors (coefficients), 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is the current dictionary, 
+\begin_inset Formula $\mathbf{W}$
+\end_inset
+
+ is the adjacency matrix of 
+\begin_inset Formula $\mathbf{X}_{i}$
+\end_inset
+
+, and 
+\begin_inset Formula $\lambda_{1},\lambda_{2}\in\mathbb{R}$
+\end_inset
+
+ are regularization parameters.
+ The first term gives the (squared) reconstruction error, the second term
+ implements sparsity regularization, and the third term implements 
+\begin_inset Quotes eld
+\end_inset
+
+smoothness
+\begin_inset Quotes erd
+\end_inset
+
+ regularization, which arises from the authors' application to video signals.
+ Then, a newly observed event 
+\begin_inset Formula $\mathbf{X}'$
+\end_inset
+
+ with reconstruction weight vectors 
+\begin_inset Formula $\boldsymbol{\alpha}'$
+\end_inset
+
+ learned using the current dictionary 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is said to be unusual if 
+\begin_inset Formula $J\left(\mathbf{X'},\boldsymbol{\alpha}',\mathbf{D}\right)$
+\end_inset
+
+ is greater than some specified threshold 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+It may not be necessary to implement smoothness regularization for other
+ signal classes, e.g., audio, and in practice we find that the reconstruction
+ sum of squared errors (SSE) tends to dominate the sparsity regularization.
+ Thus, for each iteration 
+\begin_inset Formula $t$
+\end_inset
+
+, we will compute the reconstruction sum of squared errors (SSE) and define
+ an event to be unusual if the SSE for the 
+\begin_inset Formula $t\text{th}$
+\end_inset
+
+ iteration is greater than a specified threshold.
 \end_layout
 
 \begin_layout Section
