@@ -742,35 +742,82 @@ Application - TBD after code done
 \end_layout
 
 \begin_layout Subsection
-Structure of an audio signal
+Overview
 \end_layout
 
 \begin_layout Standard
-We now consider the problem of creating a digital representation of an (analog)
- audio signal.
- The signal is continuous as a function of time, so to digitize it we take
- discrete 
+To test the strengths of online dictionary learning for detecting change
+ points, we applied the concept of initial dictionary learning with sequential
+ dictionary update to an audio signal.
+ The hypothesis in this test application is that: (1) reconstruction of
+ a signal window with the dictionary learned prior to that window will perform
+ poorly if new elements were encountered (e.g.
+ new instruments, key changes, etc.) in that window and result in a spike
+ in the reconstruction error; (2) online updates of the dictionary would
+ increase the performance of change point detection by emphasizing the frequent
+ features of the signal more than the infrequent while inherently allowing
+ major temporal shifts.
+ Of note is that while we chose to use an audio signal in this application,
+ no aspect of the algorithm is specifically designed for audio and the learning
+ is entirely unsupervised, so these concepts can be just as readily adapted
+ for other types of data.
+ In this implementation, we chose to consider 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ by Queen, due to its frequent, noticeable (to the human ear) changes in
+ style, range, and tempo.
+\end_layout
+
+\begin_layout Subsection
+Audio Signal Structure
+\end_layout
+
+\begin_layout Standard
+To appropriately apply online dictionary learning to an audio signal, we
+ first sought to understand the underlying methodologies for encoding audio
+ in a digital signal.
+ Analog audio is continuous as a function of time, so to digitize it we
+ take discrete 
 \emph on
 samples
 \emph default
 .
- Each sample quantizes the 
+ The basic properties of this digitization include:
+\end_layout
+
+\begin_layout Itemize
+Each sample quantizes the 
 \emph on
 amplitude
 \emph default
  of the signal at a point in time.
- The 
+\end_layout
+
+\begin_layout Itemize
+The 
 \emph on
 sampling rate
 \emph default
  is the average number of samples obtained in one second.
- The resolution of each sample corresponds to the number of possible values
+ 
+\end_layout
+
+\begin_layout Itemize
+The resolution of each sample corresponds to the number of possible values
  of the amplitude, which is given by the 
 \emph on
 bit depth
 \emph default
 .
- We may also consider the number of 
+\end_layout
+
+\begin_layout Itemize
+The number of 
 \emph on
 channels
 \emph default
@@ -803,207 +850,7 @@ target "http://www.seaandsailor.com/dictlearning.html"
 \end_layout
 
 \begin_layout Subsection
-Unusual event as applied to an audio signal
-\end_layout
-
-\begin_layout Standard
-Change in meter, key change, whatever
-\end_layout
-
-\begin_layout Subsection
-Test case - Meredith/Sean
-\end_layout
-
-\begin_layout Standard
-We consider the song 
-\begin_inset Quotes eld
-\end_inset
-
-Bohemian Rhapsody
-\begin_inset Quotes erd
-\end_inset
-
- by Queen.
- For simplicity, we store the signal in the Waveform Audio File Format (WAV)
- with a sampling rate of 16,000 Hz, a bit depth of 16, and a single, i.e.,
- monaural, channel.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Quotes eld
-\end_inset
-
-Bohemian Rhapsody
-\begin_inset Quotes erd
-\end_inset
-
- WAV or whatever, walk through the code, include graphics, especially SSE/MSE
- whatever reconstruction, and map peaks in error to 
-\begin_inset Quotes eld
-\end_inset
-
-events
-\begin_inset Quotes erd
-\end_inset
-
- (hopefully, unusual) in song
-\end_layout
-
-\begin_layout Standard
-This is how to add a Python 3 code chunk.
- knitr does not support Python plotting out of the box, but fortunately
- the knitron package makes it possible:
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset href
-LatexCommand href
-target "https://github.com/fhirschmann/knitron"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Follow the instructions there to set it up, then load the package in hidden
- chunk.
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<setup, echo = F, eval = F>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-# library(knitron)
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-We are now ready to run some Python code.
- Notice chunk option engine = 'ipython'.
- You'll need to install scipy, matplotlib, and numpy, which can be done
- with pip3 install scipy, matplotlib (numpy is a scipy dependency).
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-<<example, eval = F, engine = 'python', fig.height = 3, fig.width = 5, fig.align
- = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
-\end_layout
-
-\begin_layout Plain Layout
-
-# knitron already imports matplotlib for us
-\end_layout
-
-\begin_layout Plain Layout
-
-# import matplotlib.pyplot as plt
-\end_layout
-
-\begin_layout Plain Layout
-
-import scipy as sc
-\end_layout
-
-\begin_layout Plain Layout
-
-import numpy as np
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-# Load signal used to build the dictionary
-\end_layout
-
-\begin_layout Plain Layout
-
-from scipy.io import wavfile
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-import os
-\end_layout
-
-\begin_layout Plain Layout
-
-# fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
-\end_layout
-
-\begin_layout Plain Layout
-
-# data = data / 2.0**15
-\end_layout
-
-\begin_layout Plain Layout
-
-# print(data.shape)
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-# plt.rcParams.update({'font.size': 10})
-\end_layout
-
-\begin_layout Plain Layout
-
-         
-\end_layout
-
-\begin_layout Plain Layout
-
-# plt.plot(data[0:fs*5]) 
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+Defining unusual events
 \end_layout
 
 \begin_layout Standard
@@ -1894,6 +1741,642 @@ Unusual event detection rates
 \end_inset
 
 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Test case - Meredith/Sean
+\end_layout
+
+\begin_layout Standard
+To test the strengths of online dictionary learning in detecting change
+ points in an audio signal, we used Python's scikit learning library, which
+ contains implementations of the algorithms described by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+.
+ Our implementation combined and modified the two methodologies of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ contained the description and recommendations for applying these concepts
+ to vector data (by vectorizing image data), which matches the format of
+ the monoaural channel audio signal involved in this effort.
+ However, the implementation in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+specifically addressed the constraint that the audio signal is structured
+ in time and should not be randomly sampled, but instead processed using
+ a sliding window.
+ Further guidance was provided by seaandsailor implementation, which directly
+ processed speech sample audio for reconstruction performance.
+ The final Python code is contained in Appendix A, but the basic structure
+ is detailed in the pseudocode below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}[2]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Require
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $x\in\mathbb{R}^{m}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ (audio signal, WAV format, 16,000 Hz, monoaural channel), 
+\begin_inset Formula $k\in\mathbb{N}$
+\end_inset
+
+ (number of dictionary components)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ INITIAL TRAINING
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Extract initial training set, 
+\begin_inset Formula $x_{0}\in\mathbb{R}^{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reshape 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbf{X_{0}}\in(n/k,k)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Learn the initial dictionary 
+\begin_inset Formula $D_{0}\in(k,k)$
+\end_inset
+
+ from 
+\begin_inset Formula $\mathbf{X_{0}}$
+\end_inset
+
+ using least angle regression (LARS) method to compute the LASSO solution
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the reconstruction matrix 
+\begin_inset Formula $\alpha_{0}\in(n/k,k)$
+\end_inset
+
+ using Orthogonal Matching Pursuit (OMP) with 
+\begin_inset Formula $D_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reconstruct the training set data and vectorize: 
+\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{0}}=\mathbf{\alpha}_{\mathbf{0}}D_{0}\Rightarrow\hat{x}_{0}\in\mathbb{R}^{n}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ ONLINE LEARNING
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $T=(m-n)/(16,000*w)$
+\end_inset
+
+, where 
+\begin_inset Formula $w$
+\end_inset
+
+ is the length of each sample window in seconds
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$t=1$ to $T$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Extract 
+\begin_inset Formula $x_{t}\in\mathbb{R}^{16,000w}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reshape 
+\begin_inset Formula $x_{t}$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbf{X_{t}}\in(16,000w/k,k)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the reconstruction matrix 
+\begin_inset Formula $\alpha_{t}\in(16,000w/k,k)$
+\end_inset
+
+ with 
+\begin_inset Formula $D_{t-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reconstruct the window of data and vectorize: 
+\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{t}}=\mathbf{\mathbf{\alpha}_{\mathbf{t}}}D_{t-1}\Rightarrow\hat{x}_{t}\in\mathbb{R}^{16,000w}$
+\end_inset
+
+ , append to previous reconstructions
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the sum of squared errors (SSE), 
+\begin_inset Formula $SSE_{t}=\sum(x_{t}-\hat{x}_{t})^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Update dictionary, 
+\begin_inset Formula $D_{t-1}\Rightarrow D_{t}$
+\end_inset
+
+, using 
+\begin_inset Formula $D_{t-1}$
+\end_inset
+
+ as a warm restart
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{SSE}$ (Reconstruction Errors), 
+\backslash
+textbf{Reconstructed audio}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Online dictionary learning
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Several concerns were addressed in the development of this final implementation
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<setup, echo = F, eval = F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# library(knitron)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We are now ready to run some Python code.
+ Notice chunk option engine = 'ipython'.
+ You'll need to install scipy, matplotlib, and numpy, which can be done
+ with pip3 install scipy, matplotlib (numpy is a scipy dependency).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<example, eval = F, engine = 'python', fig.height = 3, fig.width = 5, fig.align
+ = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# knitron already imports matplotlib for us
+\end_layout
+
+\begin_layout Plain Layout
+
+# import matplotlib.pyplot as plt
+\end_layout
+
+\begin_layout Plain Layout
+
+import scipy as sc
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Load signal used to build the dictionary
+\end_layout
+
+\begin_layout Plain Layout
+
+from scipy.io import wavfile
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import os
+\end_layout
+
+\begin_layout Plain Layout
+
+# fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
+\end_layout
+
+\begin_layout Plain Layout
+
+# data = data / 2.0**15
+\end_layout
+
+\begin_layout Plain Layout
+
+# print(data.shape)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# plt.rcParams.update({'font.size': 10})
+\end_layout
+
+\begin_layout Plain Layout
+
+         
+\end_layout
+
+\begin_layout Plain Layout
+
+# plt.plot(data[0:fs*5]) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
 \end_layout
 
 \begin_layout Plain Layout
