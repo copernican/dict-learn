@@ -4,24 +4,8 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass amsart
-\begin_preamble
-\allowdisplaybreaks
-\DeclareMathOperator{\E}{E}
-\DeclareMathOperator{\Var}{Var}
-\DeclareMathOperator{\Cov}{Cov}
-\DeclareMathOperator{\dif}{d}
-\DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator{\tr}{tr}
-\usepackage{algpseudocode}
-\end_preamble
+\textclass article
 \use_default_options true
-\begin_modules
-theorems-ams
-eqs-within-sections
-figs-within-sections
-knitr
-\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -43,11 +27,10 @@ knitr
 \bibtex_command default
 \index_command default
 \paperfontsize default
-\spacing single
 \use_hyperref false
 \papersize default
-\use_geometry true
-\use_package amsmath 2
+\use_geometry false
+\use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
 \use_package esint 1
@@ -70,10 +53,6 @@ knitr
 \shortcut idx
 \color #008000
 \end_index
-\leftmargin 1.5in
-\topmargin 1.5in
-\rightmargin 1.5in
-\bottommargin 1.5in
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -1011,7 +990,7 @@ how did the algorithm perform, how could it be extended
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "library"
+bibfiles "dict-learn/library"
 options "apalike"
 
 \end_inset
