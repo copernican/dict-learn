@@ -332,14 +332,91 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Methodology - Courtney to start
+Methodology
 \end_layout
 
 \begin_layout Standard
-HERE IS THE CHEN CITATION, JUST COPY AND PASTE IT WHERE YOU NEED IT
+We wish to optimize the following cost function: 
+\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $l(x_{i},{\bf D)}$
+\end_inset
+
+ is the loss function defined as the 
+\begin_inset Formula $l_{1}-sparse$
+\end_inset
+
+ 
+\begin_inset Formula $coding$
+\end_inset
+
+ problem for least squares.
+ Each column in 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is a basis vector.
+ Minimizing the loss functions leaves us with the following problem: 
+\begin_inset Formula 
+\begin{equation}
+{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
+\end{equation}
+
+\end_inset
+
+ where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the regularization parameter 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Chen1998"
+
+\end_inset
+
+.
+ This is essentially basis pursuit.
+ 
+\end_layout
+
+\begin_layout Standard
+In equation (1), 
+\begin_inset Formula $\frac{1}{2}\Vert x_{i}-{\bf D}\alpha_{i}\Vert_{2}^{2}$
+\end_inset
+
+ is the reconstruction error and 
+\begin_inset Formula $\lambda\Vert{\bf \alpha_{i}\Vert_{1}}$
+\end_inset
+
+ is the sparsity regularization.
+ A small reconstruction error indicates an usual event that was present
+ during the begining of the song.
+ A large reconstruction error indicates an unusual event.
+ As is stated by Zhao (2013), the presensce of the sparsity regularization
+ is important because the dictionary learning algorithm optimizes the sparsity
+ of the usual event reconstruction vectors.
+\end_layout
+
+\begin_layout Standard
+It is important to note that equation (1) is only convex with respect to
+ either 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+ or 
+\begin_inset Formula ${\bf \alpha}$
+\end_inset
+
+ while the other is fixed.
+ Stochatic gradient descent is used to make updates to the dictionary: 
+\begin_inset Formula 
+\begin{equation}
+{\bf D_{t}=\prod_{C}\left[{\bf D_{t-1}-\frac{\rho}{t}\bigtriangledown Dl(x_{i},{\bf D_{t-1}}}\right].}
+\end{equation}
 
 \end_inset
 
@@ -347,7 +424,7 @@ key "Chen1998"
 \end_layout
 
 \begin_layout Standard
-A learning dictionary algorithm from 
+A learning dictionary algorithm (see Algorithm 1) from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
@@ -371,60 +448,27 @@ key "Mairal2009"
 \begin_inset Formula ${\bf D}$
 \end_inset
 
- online.
+ online (see Algorithm 2 from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+.
  Additionally, a reconstruction weight vector is learned for each event.
- This weight vector is used to calculate the mean squared error.
+ This weight vector is used to calculate the sum of squares error (sse).
+ The sse is used to identify the unusual events.
+ If the sse excedes a use defined threshold, then the even is labeled as
+ unusual (see Algorithm 3 from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+).
  
-\end_layout
-
-\begin_layout Standard
-We wish to optimize the following cost function: 
-\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
-\end_inset
-
-, where 
-\begin_inset Formula $l(x_{i},{\bf D)}$
-\end_inset
-
- is the loss function.
- Each column in 
-\begin_inset Formula $\mathbf{D}$
-\end_inset
-
- is a basis vector.
- Minimizing the loss functions leaves us with the following problem: 
-\begin_inset Formula 
-\begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
-\end{equation}
-
-\end_inset
-
- where 
-\begin_inset Formula $\lambda$
-\end_inset
-
- is the regularization parameter.
- This is essentially basis pursuit.
- It is important to note that this equation is only convex with respect
- to either 
-\begin_inset Formula ${\bf D}$
-\end_inset
-
- or 
-\begin_inset Formula ${\bf \alpha}$
-\end_inset
-
- while the other is fixed.
- Stochatic gradient descent is used to make updates to the dictionary: 
-\begin_inset Formula 
-\begin{equation}
-\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
-\end{equation}
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
@@ -442,7 +486,7 @@ status open
 
 
 \backslash
-begin{algorithmic}[1]
+begin{algorithmic}
 \end_layout
 
 \end_inset
@@ -550,7 +594,7 @@ State
 
 \end_inset
 
- Sparse coding: compuse using LARS
+ Sparse coding: compute using LARS
 \begin_inset Formula 
 \begin{equation}
 \alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\mathbb{R}^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
@@ -701,15 +745,496 @@ Online dictionary learning
 
 \end_layout
 
-\begin_layout Subsection
-Definition of unusual event / change point detection / whatever
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ REQUIRE: 
+\begin_inset Formula ${\bf D=[d_{1},...,d}_{k}]\in\R^{mxk}$
+\end_inset
+
+ (input dictionary), 
+\begin_inset Formula ${\bf A}=[a_{1}...,a_{k}]\in\R^{kxk}={\displaystyle \sum_{i=1}^{t}\alpha_{i}\alpha_{i}^{T}}$
+\end_inset
+
+, 
+\begin_inset Formula ${\bf B}=[b_{1},...,b_{k}]\in\R^{mxk}={\displaystyle \sum_{i=1}^{t}{\bf x_{i}}\alpha_{i}^{T}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ repeat 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \quad{}
+\end_inset
+
+for j=1 to k do
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+Update the j-th column to optimize for (4)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{equation}
+{\bf u_{j}\leftarrow\frac{1}{{\bf A_{jj}}}(b_{j}-{\bf D}a_{j})+d,}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{equation}
+{\bf d_{j}\leftarrow\frac{1}{\max(\Vert{\bf u_{j}\Vert_{2},1)}}{\bf u_{j}}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \quad{}
+\end_inset
+
+end for
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ until convergence
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Return D (update dictionary)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Dictionary Update
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-algorithm for unusual event detection, probably similar to 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Zhao2011"
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Input: song data, learning rate 
+\begin_inset Formula $\eta$
+\end_inset
+
+, threshold 
+\begin_inset Formula $\hat{\epsilon}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Learn initial dictionary using first N seconds in song
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ repeat
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Use sliding window to obtain event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Learn optimal reconstruction vectors 
+\begin_inset Formula $\alpha_{t}$
+\end_inset
+
+for event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+by solving (4) with 
+\begin_inset Formula ${\bf D}={\bf D_{t-1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+if 
+\begin_inset Formula $J({\bf x_{t}},\alpha_{t},{\bf D_{t-1}})>\hat{\epsilon}$
+\end_inset
+
+then
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \qquad{}
+\end_inset
+
+Fire alarm for event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+end if
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Update dictionary 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+with (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ until reach the end of the song
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Unusual event detection using sparse coding
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
 
 \end_inset
 
@@ -855,12 +1380,12 @@ status open
 
 \begin_layout Plain Layout
 
-<<setup, echo = F, eval = F>>=
+<<setup, echo = F>>=
 \end_layout
 
 \begin_layout Plain Layout
 
-library(knitron)
+# library(knitron)
 \end_layout
 
 \begin_layout Plain Layout
@@ -890,8 +1415,8 @@ status open
 
 \begin_layout Plain Layout
 
-<<example, eval = F, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align
- = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
+<<example, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align = 'center',
+ fig.pos = 'h', fig.cap = 'figure caption'>>=
 \end_layout
 
 \begin_layout Plain Layout
@@ -1001,7 +1526,7 @@ how did the algorithm perform, how could it be extended
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "dict-learn/library"
+bibfiles "library"
 options "apalike"
 
 \end_inset
