@@ -15,6 +15,7 @@
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator{\tr}{tr}
 \usepackage{algpseudocode}
+\usepackage{url}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -45,7 +46,16 @@ knitr
 \index_command default
 \paperfontsize default
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
 \papersize default
 \use_geometry true
 \use_package amsmath 2
@@ -494,11 +504,15 @@ mini-batch
 \end_inset
 
 .
- We adopt this mini-batch method to process a streaming signal 
+ We adopt this mini-batch method to process 
 \begin_inset Formula $\eta$
 \end_inset
 
- samples at a time, alternating between optimizing 
+ (discrete) 
+\emph on
+samples
+\emph default
+ of a streaming signal at a time, alternating between optimizing 
 \begin_inset Formula $\boldsymbol{\alpha}$
 \end_inset
 
@@ -508,16 +522,6 @@ mini-batch
 
 .
  
-\end_layout
-
-\begin_layout Standard
-ADD A COMMENT ABOUT DISCRETIZING ANALOG SIGNALS, I.E., SAMPLING IS INHERENT
- 
-\end_layout
-
-\begin_layout Standard
--mlm: We discuss this in Section 3.
- Should we mention it again?
 \end_layout
 
 \begin_layout Standard
@@ -1460,8 +1464,8 @@ Bohemian Rhapsody
 \begin_inset Quotes erd
 \end_inset
 
- by Queen, due to its frequent, noticeable (to the human ear) changes in
- style, range, and tempo.
+ by the British rock band Queen, due to its frequent, noticeable (to the
+ human ear) changes in style, range, and tempo.
 \end_layout
 
 \begin_layout Standard
@@ -1478,9 +1482,12 @@ knows
 \end_inset
 
  what comes after.
- With online learning, however, the dictionary has no a priori information
- on what features will be in the next signal window, so is better suited
- to identify changes.
+ With online learning, however, the dictionary has no 
+\emph on
+a priori
+\emph default
+ information on what features will be in the next signal window, so is better
+ suited to identify changes.
 \end_layout
 
 \begin_layout Subsection
@@ -1534,17 +1541,16 @@ channels
 
 \begin_layout Standard
 For our application, we obtained an uncompressed, 16,000 Hz (sampling rate),
- 16 bit (bit depth), monoaural (channels) waveform audio file (WAV) for
+ 16-bit (bit depth), monaural (1 channel) waveform audio file (WAV) for
  
 \begin_inset Quotes eld
 \end_inset
 
-Bohemian Rhapsody
+Bohemian Rhapsody.
 \begin_inset Quotes erd
 \end_inset
 
-.
- At 16 bit depth, amplitudes range from 
+ At 16-bit depth, amplitudes range from 
 \begin_inset Formula $-2^{15}$
 \end_inset
 
@@ -1568,7 +1574,15 @@ For comparison with the peaks in the reconstruction errors and assessing
 \begin_inset Quotes eld
 \end_inset
 
-Bohemian Rhapsody
+Bohemian Rhapsody,
+\begin_inset Quotes erd
+\end_inset
+
+ i.e., 
+\begin_inset Quotes eld
+\end_inset
+
+ground truth,
 \begin_inset Quotes erd
 \end_inset
 
@@ -1597,15 +1611,12 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="18" columns="5">
+<lyxtabular version="3" rows="18" columns="2">
 <features tabularvalignment="middle">
 <column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<column alignment="center" valignment="top" width="0pt">
+<row topspace="default">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1614,7 +1625,7 @@ Time
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" bottomline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1623,36 +1634,9 @@ Description
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1661,7 +1645,7 @@ Description
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1670,36 +1654,9 @@ meter change (5/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1708,7 +1665,7 @@ meter change (5/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1717,36 +1674,9 @@ meter change (4/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1755,7 +1685,7 @@ meter change (4/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1764,36 +1694,9 @@ new instrument (piano)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1802,7 +1705,7 @@ new instrument (piano)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1811,36 +1714,9 @@ new instrument (cymbal swell)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1849,7 +1725,7 @@ new instrument (cymbal swell)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1858,36 +1734,9 @@ new instrument (bass)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1896,7 +1745,7 @@ new instrument (bass)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1905,36 +1754,9 @@ new instrument (set)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1943,7 +1765,7 @@ new instrument (set)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1952,36 +1774,9 @@ meter change (2/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1990,7 +1785,7 @@ meter change (2/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1999,36 +1794,9 @@ meter change (4/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2037,7 +1805,7 @@ meter change (4/4)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2046,36 +1814,9 @@ new instrument (guitar)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2084,7 +1825,7 @@ new instrument (guitar)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2093,36 +1834,9 @@ guitar solo
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2131,7 +1845,7 @@ guitar solo
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2140,36 +1854,9 @@ end guitar solo, key change (A major)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2178,7 +1865,7 @@ end guitar solo, key change (A major)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2187,36 +1874,9 @@ lead vocals rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2225,7 +1885,7 @@ lead vocals rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2234,36 +1894,9 @@ backing vocals rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2272,7 +1905,7 @@ backing vocals rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2281,36 +1914,9 @@ key change (E-flat major)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2319,7 +1925,7 @@ key change (E-flat major)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2328,36 +1934,9 @@ bass, set rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<row topspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2366,7 +1945,7 @@ bass, set rejoin
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2375,36 +1954,9 @@ meter change (12/8)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
 </row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<row topspace="default" bottomspace="default">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -2413,38 +1965,11 @@ meter change (12/8)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 vocals rejoin
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -2467,7 +1992,15 @@ name "tab:unusual-events"
 
 \end_inset
 
-Unusual event detection rates
+Unusual events in 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ 
 \end_layout
 
 \end_inset
@@ -2499,8 +2032,11 @@ key "Mairal2009"
 
 \end_inset
 
- have been implemented in the MiniBatchDictionaryLearning class of Python's
- 
+ have been implemented in the 
+\family typewriter
+MiniBatchDictionaryLearning
+\family default
+ class of Python's 
 \family typewriter
 \series bold
 scikit-learn
@@ -2547,11 +2083,11 @@ key "Zhao2011"
  used online learning to detect unusual events in video, paralleling our
  application well, and detailed the use of a sliding window during processing,
  rather than random samples.
- Further guidance was provided by João Felipe Santos' application of online
- learning to speech samples 
+ Further guidance was provided by the application of online learning to
+ speech samples in 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "joãofelipesantos2014"
+key "Santos2014"
 
 \end_inset
 
@@ -2571,93 +2107,6 @@ reference "alg:pseudo-python"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-Optimization of the algorithm runtime was initiated with recommendations
- from the literature, but were modified empirically until performance was
- improved to acceptable runtimes.
- The following parameters required empirical optimization:
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Sparsity controlling parameter of Equation 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:lasso"
-
-\end_inset
-
-:
-\series default
- Due to the length of the signals used during online learning, the suggested
- value in 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Mairal2009"
-
-\end_inset
-
- of 
-\begin_inset Formula $1.2/\sqrt{m}$
-\end_inset
-
- did not perform well and was changed back to the default value of 1.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Number of iterations to perform during each training window: 
-\series default
-Reduced to 200 from the default of 1000 to improve runtime.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Algorithm used to fit the dictionary to the input signal:
-\series default
- least angle regression (LARS, default), the coordinate descent alternative
- performed much more slowly.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Algorithm used to transform the input signal and generate the reconstruction
- vector: 
-\series default
-orthogonal matching pursuit (OMP); LASSO_LARS was also tested but performed
- much more slowly.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-The tolerance parameter of the OMP algorithm: 
-\series default
-Set to 0.001 to ensure strong reconstruction.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Window Size: 
-\series default
-2 seconds, a value that provided a good trade-off between runtime performance
- and the resolution of results.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Number of dictionary components extracted: 
-\series default
-500, a value that provided a good trade-off between runtime performance
- and strong reconstruction capabilities.
 \end_layout
 
 \begin_layout Standard
@@ -2779,13 +2228,13 @@ State
  Extract initial training set: 
 \series bold
 
-\begin_inset Formula $\mathbf{X_{0}}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
+\begin_inset Formula $\mathbf{X}_{0}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} {}^{T}$
 \end_inset
 
 
 \series default
 , where 
-\begin_inset Formula $\mathcal{I\in}\{1,2,...,p\}$
+\begin_inset Formula $\mathcal{I\in}\left\{ 1,2,...,p\right\} $
 \end_inset
 
 
@@ -2809,7 +2258,7 @@ State
 \end_inset
 
  from 
-\begin_inset Formula $\mathbf{X_{0}}$
+\begin_inset Formula $\mathbf{X}_{0}$
 \end_inset
 
  using least angle regression (LARS) method to compute the LASSO solution
@@ -2853,7 +2302,7 @@ State
 \end_inset
 
  Reconstruct the training set data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{0}}=\boldsymbol{\mathbf{\alpha}}_{\mathbf{0}}\mathbf{D}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{n}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{0}=\boldsymbol{\alpha}_{0}\mathbf{D}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{n}$
 \end_inset
 
  
@@ -2889,7 +2338,7 @@ State
 \end_inset
 
  
-\begin_inset Formula $\mathcal{T}=k(n-p)/(16,000w)$
+\begin_inset Formula $\mathcal{T}=k\left(n-p\right)/\left(16,000w\right)$
 \end_inset
 
 , where 
@@ -2951,11 +2400,11 @@ State
 \end_inset
 
  Extract 
-\begin_inset Formula $\mathbf{X}_{t}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
+\begin_inset Formula $\mathbf{X}_{t}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} {}^{T}$
 \end_inset
 
 , where 
-\begin_inset Formula $\mathcal{I}\in{\left\{ p+1+(t-1)\eta,...,p+1+t\eta\right\} }$
+\begin_inset Formula $\mathcal{I}\in\left\{ p+1+(t-1)\eta,...,p+1+t\eta\right\} $
 \end_inset
 
 
@@ -2999,7 +2448,7 @@ State
 \end_inset
 
  Reconstruct the window of data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\mathbf{\boldsymbol{\mathbf{\alpha}}_{\mathbf{t}}}\mathbf{D}_{t-1}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\boldsymbol{\alpha}_{t}\mathbf{D}_{t-1}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
 \end_inset
 
  , append to previous reconstructions
@@ -3125,28 +2574,157 @@ Change Point Detection with Online Dictionary Learning
 \end_layout
 
 \begin_layout Standard
-We implemented this algorithm on one core of a Intel Xeon CPU with a 2.00GHz
- processor and 96 GB of RAM.
+Optimization of the algorithm runtime was initiated with recommendations
+ from the literature, which were modified empirically until performance
+ was improved to acceptable runtimes.
+ The following parameters required empirical optimization:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Sparsity controlling parameter of Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:lasso"
+
+\end_inset
+
+:
+\series default
+ Due to the length of the signals used during online learning, the suggested
+ value in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ of 
+\begin_inset Formula $1.2/\sqrt{m}$
+\end_inset
+
+ did not perform well and was changed back to the default value of 1.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Number of iterations to perform during each training window: 
+\series default
+Reduced to 200 from the default of 1000 to improve runtime.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Algorithm used to fit the dictionary to the input signal:
+\series default
+ least angle regression (LARS, default), the coordinate descent alternative
+ performed much more slowly.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Algorithm used to transform the input signal and generate the reconstruction
+ vector: 
+\series default
+orthogonal matching pursuit (OMP); LASSO-LARS was also tested but performed
+ much more slowly.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+The tolerance parameter of the OMP algorithm: 
+\series default
+Set to 0.001 to ensure strong reconstruction.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Window Size: 
+\series default
+2 seconds, a value that provided a good trade-off between runtime performance
+ and the resolution of results.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Number of dictionary components extracted: 
+\series default
+500, a value that provided a good trade-off between runtime performance
+ and strong reconstruction capabilities.
+\end_layout
+
+\begin_layout Standard
+We implemented this algorithm on one core of an Intel Xeon 2.00GHz CPU and
+ 96 GB of RAM.
  Initial dictionary training on the first 10 seconds of the song, i.e.
  
-\begin_inset Formula $\mathbf{X_{0}\in(320,500)}$
+\begin_inset Formula $\mathbf{X}_{0}\in\mathbf{M}_{320,500}\left(\mathbb{R}\right)$
 \end_inset
 
 , took 44 seconds.
  The online dictionary learning with a window size of 2 seconds, i.e.
  
-\begin_inset Formula $\mathbf{X_{\mathbf{t}}\in(64,500)}$
+\begin_inset Formula $\mathbf{X}_{t}\in\mathbf{M}_{64,500}\left(\mathbb{R}\right)$
 \end_inset
 
 , cycled through 172 windows to complete the song, taking 163 minutes total.
 \end_layout
 
 \begin_layout Section
-Discussion - TBD
+Discussion
 \end_layout
 
 \begin_layout Subsection
 Results
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:sse}
+\end_layout
+
+\end_inset
+
+ plots the sum of squared errors in reconstructing the signal in each 2-second
+ window using the dictionary learned during the previous window.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+epochs
+\begin_inset Quotes erd
+\end_inset
+
+ in the song are displayed based on 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "wiki:xxx"
+
+\end_inset
+
+, and the key and instrumental changes are as in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:unusual-events"
+
+\end_inset
+
+.
+ We also plot the 75th and 90th percentiles of the SSE.
 \end_layout
 
 \begin_layout Standard
@@ -3161,7 +2739,12 @@ status open
 
 \begin_layout Plain Layout
 
-dat <- read.csv("sse_and_sparsity.csv")
+dat <- read.csv("sse_sparsity_objective.csv")
+\end_layout
+
+\begin_layout Plain Layout
+
+colnames(dat) <- c("SSE","sparsity","J") 
 \end_layout
 
 \begin_layout Plain Layout
@@ -3175,7 +2758,7 @@ sf <- stepfun(x = (seq_along(dat$SSE) - 1) * 2, y = c(0, dat$SSE))
 
 \begin_layout Plain Layout
 
-par(mgp = c(1.5,0.5,0), mar = c(2,0,3,0))
+par(mgp = c(1.5,0.5,0), mar = c(2,1,3,0))
 \end_layout
 
 \begin_layout Plain Layout
@@ -3265,6 +2848,11 @@ sec.epoch <- c(-10, 38, 144, 171, 235, 284)
 
 \begin_layout Plain Layout
 
+mtext("epoch", side = 3, line = 2, cex = 0.6, at = -40, adj = 0, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
 for(i in seq_along(labs.epoch)) {
 \end_layout
 
@@ -3299,6 +2887,11 @@ sec.key <- c(-10, 171, 192)
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
+mtext("key", side = 3, line = 1, cex = 0.6, at = -40, adj = 0, font = 2)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3346,6 +2939,18 @@ sec.inst <- c(-10, 5, 38, 73, 129, 174, 194, 243)
 
 \begin_layout Plain Layout
 
+mtext("instru-
+\backslash
+nment", line = -0.5, side = 3, cex = 0.6, at = -40, 
+\end_layout
+
+\begin_layout Plain Layout
+
+      adj = 0, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
 for(i in seq_along(labs.inst)) {
 \end_layout
 
@@ -3389,7 +2994,7 @@ legend("topright", legend = c("90th", "75th"), col = rev(col.qt),
 
 \begin_layout Plain Layout
 
-       title = "SSE quantiles")
+       title = "SSE percentiles")
 \end_layout
 
 \begin_layout Plain Layout
@@ -3418,6 +3023,164 @@ abline(h = eps, col = col.qt, lty = lty.qt)
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Unusual event detection requires that we choose some threshold 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+, such that any window with reconstruction error greater than 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ is said to contain unusual signal behavior.
+ We see that at the 90th percentile of SSE (corresponding to 
+\begin_inset Formula $\varepsilon_{90}\approx\Sexpr{round(eps[2],0)}$
+\end_inset
+
+), we would classify as unusual 
+\end_layout
+
+\begin_layout Itemize
+the initial appearance of the guitar,
+\end_layout
+
+\begin_layout Itemize
+the ensuing guitar solo,
+\end_layout
+
+\begin_layout Itemize
+the beginning of the 
+\begin_inset Quotes eld
+\end_inset
+
+opera
+\begin_inset Quotes erd
+\end_inset
+
+ epoch,
+\end_layout
+
+\begin_layout Itemize
+and the simultaneous key change to E-flat major and reintroduction of the
+ bass guitar and drum set.
+\end_layout
+
+\begin_layout Standard
+We also observe several windows with reconstruction error greater than 
+\begin_inset Formula $\varepsilon_{90}$
+\end_inset
+
+, which may represent 
+\emph on
+false positives
+\emph default
+, or possibly actual unusual events not considered in the limited classification
+ of 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:unusual-events"
+
+\end_inset
+
+.
+ We also observe that we do 
+\emph on
+not
+\emph default
+ detect as unusual the initial appearances of the piano, bass, and drum
+ set.
+\end_layout
+
+\begin_layout Standard
+At the 75th percentile of SSE (corresponding to 
+\begin_inset Formula $\varepsilon_{75}\approx\Sexpr{round(eps[1],0)}$
+\end_inset
+
+), we would classify as unusual all the events classified as unusual at
+ the 90th percentile, as well as
+\end_layout
+
+\begin_layout Itemize
+the initial appearance of the piano,
+\end_layout
+
+\begin_layout Itemize
+the initial appearance of the drum set,
+\end_layout
+
+\begin_layout Itemize
+the reappearance of vocals during the 
+\begin_inset Quotes eld
+\end_inset
+
+hard rock
+\begin_inset Quotes erd
+\end_inset
+
+ epoch,
+\end_layout
+
+\begin_layout Itemize
+and the beginning of the 
+\begin_inset Quotes eld
+\end_inset
+
+outro
+\begin_inset Quotes erd
+\end_inset
+
+ epoch.
+\end_layout
+
+\begin_layout Standard
+Now, the false positive rate will go to 100% as 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ goes to zero because we are reconstructing the signal from a limited dictionary
+ and have explicitly favored sparse reconstructions, i.e., those with a higher
+ number of zero coefficients.
+ It is thus unsurprising that we observe more false positives at the 75th
+ percentile than at the 90th percentile.
+ The unusual events that we detect at the 75th percentile, but not at the
+ 90th percentile, may also be better represented by the dictionary learned
+ during the previous window.
+ For example, that we detect the initial appearance of the piano only at
+ 
+\begin_inset Formula $\varepsilon_{75}$
+\end_inset
+
+ is possibly explained by the similar range during the 
+\begin_inset Quotes eld
+\end_inset
+
+intro
+\begin_inset Quotes erd
+\end_inset
+
+ epoch of the piano arrangement and the human voice, where the latter constitute
+s the bulk of the training data available to the dictionary upon the introductio
+n of the piano.
+\end_layout
+
+\begin_layout Standard
+Thus, we observe reasonable performance from the algorithm on 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody.
+\begin_inset Quotes erd
+\end_inset
+
+ In particular, we successfully detect both the guitar solo and the opera
+ epoch, which are two of the most identifiable passages from the song.
+ That the detection was performed in an unsupervised fashion makes the result
+ that much more significant.
+ Further application of this algorithm to a particular signal would likely
+ require empirical tuning of the parameters and selection of an appropriate
+ reconstruction error threshold.
 \end_layout
 
 \begin_layout Subsection
@@ -3456,8 +3219,8 @@ key "Mairal2009"
 \end_inset
 
 .
- This would require forgoing the use of the functions available in the MiniBatch
-DictionaryLearning class of Python's 
+ This would require forgoing the use of the functions available in Python's
+ 
 \family typewriter
 \series bold
 scikit-learn
