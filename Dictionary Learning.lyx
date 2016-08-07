@@ -459,12 +459,16 @@ key "Lee2007"
 \end_layout
 
 \begin_layout Standard
-Now suppose that we wish to learn a dictionary to represent a set of samples
+Now suppose that we wish to learn a dictionary to represent a set of discrete
+ 
+\emph on
+samples
+\emph default
  
 \begin_inset Formula $\left\{ \mathbf{x}_{i}\right\} _{i=1}^{n}$
 \end_inset
 
-, where 
+ of some analog signal, where 
 \begin_inset Formula $n$
 \end_inset
 
@@ -501,7 +505,7 @@ mini-batch
 \end_inset
 
  samples at each iteration 
-\begin_inset Formula $t\in\left\{ 1,2,\ldots\mathcal{T}\right\} $
+\begin_inset Formula $t\in\left\{ 1,2,\ldots T\right\} $
 \end_inset
 
 .
@@ -509,11 +513,8 @@ mini-batch
 \begin_inset Formula $\eta$
 \end_inset
 
- (discrete) 
-\emph on
-samples
-\emph default
- of a streaming signal at a time, alternating between optimizing 
+ samples of a streaming signal at a time, alternating between optimizing
+ 
 \begin_inset Formula $\boldsymbol{\alpha}$
 \end_inset
 
@@ -663,7 +664,7 @@ Ensure
 \end_inset
 
  learned dictionary 
-\begin_inset Formula $\mathbf{D}_{\mathcal{T}}$
+\begin_inset Formula $\mathbf{D}_{T}$
 \end_inset
 
 
@@ -683,7 +684,7 @@ State
 \end_inset
 
  Calculate the number of iterations 
-\begin_inset Formula $\mathcal{T}$
+\begin_inset Formula $T$
 \end_inset
 
  and the number of samples per iteration 
@@ -1427,8 +1428,8 @@ It may not be necessary to implement smoothness regularization for other
 \begin_inset Formula $t$
 \end_inset
 
-, we will compute the reconstruction sum of squared errors (SSE) and define
- an event to be unusual if the SSE for the 
+, we will compute the reconstruction SSE and define an event to be unusual
+ if the SSE for the 
 \begin_inset Formula $t\text{th}$
 \end_inset
 
@@ -1445,15 +1446,15 @@ Overview
 
 \begin_layout Standard
 To test the strengths of online dictionary learning for detecting change
- points, we applied the concept of initial dictionary learning with sequential
+ points, we apply the concept of initial dictionary learning with sequential
  dictionary update to an audio signal.
- As stated previously, we hypothesize that the reconstruction of a signal
- window with the dictionary learned prior will perform poorly if new elements
- were encountered during that window (e.g.
+ As stated above, we hypothesize that the reconstruction of a signal window
+ with the dictionary learned prior will perform poorly if new elements were
+ encountered during that window (e.g.
  new instruments, key changes, etc.).
  This will result in a spike in the reconstruction error for that window,
  allowing for the identification of change points.
- We chose to consider 
+ For a test case, we consider the song 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1467,9 +1468,9 @@ Bohemian Rhapsody
 
 \begin_layout Standard
 Online dictionary learning seems well suited to this application since the
- sequential updates to the dictionary inherently provides a temporal aspect
+ sequential updates to the dictionary inherently provide a temporal aspect
  to the learning and reconstruction process.
- If a dictionary was instead learned on the entire song, the major change
+ If a dictionary were instead learned on the entire song, the major change
  points might be masked since the dictionary 
 \begin_inset Quotes eld
 \end_inset
@@ -1555,7 +1556,7 @@ Bohemian Rhapsody.
 \begin_inset Formula $2^{15}-1$
 \end_inset
 
-, so pre-processing the signal involved normalizing these amplitudes to
+, so pre-processing the signal involves normalizing these amplitudes to
  range from -1 to 1.
  
 \end_layout
@@ -2040,7 +2041,7 @@ scikit-learn
 \family default
 \series default
  library, so could be readily utilized for our application.
- However, our use case required a hybrid implementation of the two methodologies
+ However, our use case requires a hybrid implementation of the two methodologies
  of 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -2066,10 +2067,10 @@ key "Mairal2009"
 
 \end_inset
 
- contained the description and recommendations for applying the basic online
+ contains the description and recommendations for applying the basic online
  learning framework to vector data (by vectorizing image data), similar
- to the format of the monoaural channel audio signal involved in this effort,
- but utilized random sampling of the images.
+ to the format of the monaural channel audio signal involved in this effort,
+ but utilizes random sampling of the images.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -2077,26 +2078,26 @@ key "Zhao2011"
 
 \end_inset
 
- used online learning to detect unusual events in video, paralleling our
- application well, and detailed the use of a sliding window during processing,
+ uses online learning to detect unusual events in video, paralleling our
+ application well, and details the use of a sliding window during processing,
  rather than random samples.
- Further guidance was provided by the application of online learning to
- speech samples in 
+ Further guidance is provided by the application of online learning to speech
+ samples in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Santos2014"
 
 \end_inset
 
-, which directly addressed processing audio.
+, which directly addresses processing audio.
  The final Python code is contained in Appendix 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:code"
+reference "sec:python-code"
 
 \end_inset
 
-, but the basic structure is detailed in the pseudocode of Algorithm 
+, and the basic structure is detailed in the pseudocode of Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:pseudo-python"
@@ -2258,7 +2259,7 @@ State
 \begin_inset Formula $\mathbf{X}_{0}$
 \end_inset
 
- using least angle regression (LARS) method to compute the LASSO solution
+ using least angle regression (LARS) to compute the LASSO solution
 \end_layout
 
 \begin_layout Plain Layout
@@ -2640,17 +2641,17 @@ Set to 0.001 to ensure strong reconstruction.
 \begin_layout Itemize
 
 \series bold
-Window Size: 
+Window size: 
 \series default
-The window size was of particular concern because it directly affects the
- resolution of the output SSE data.
+The window size is of particular concern because it directly affects the
+ time resolution of our ability to detect unusual events.
  That is, by having a window size that was too large, it would be difficult
  to identify the true location of changes, since a single window could potential
 ly contain multiple novel musical features.
- These features would be learned in one iteration of code, but recorded
- using only a single error value, inhibiting change point detection.
+ These features would be learned in one iteration of the algorithm, but
+ recorded using only a single error value, inhibiting change point detection.
  However, runtime prevented the use of a window that was too narrow.
- We chose a window size of 2 seconds, to obtain an acceptably short runtime
+ We chose a window size of 2 seconds to obtain an acceptably short runtime
  while maintaining adequate resolution.
 \end_layout
 
@@ -2728,6 +2729,18 @@ reference "tab:unusual-events"
 
 .
  We also plot the 75th and 90th percentiles of the SSE.
+ 
+\family sans
+R
+\family default
+ code to reproduce this figure is contained in Appendix 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:r-code"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2742,7 +2755,7 @@ status open
 
 \begin_layout Plain Layout
 
-dat <- read.csv("sse_sparsity_objective.csv")
+dat <- read.csv("sse_sparsity_objective.csv", header = F)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3180,7 +3193,7 @@ Bohemian Rhapsody.
  In particular, we successfully detect both the guitar solo and the opera
  epoch, which are two of the most identifiable passages from the song.
  The algorithm also successfully and quickly learns these new features and
- the error drops when similar data is encountered in the subsequent windows.
+ the error drops when similar data are encountered in the subsequent windows.
  This is clear from the plot of the SSE in 
 \begin_inset ERT
 status open
@@ -3304,7 +3317,7 @@ options "apalike"
 \start_of_appendix
 \begin_inset CommandInset label
 LatexCommand label
-name "sec:code"
+name "sec:python-code"
 
 \end_inset
 
@@ -3746,7 +3759,325 @@ np.savetxt('sse.csv', sse.T, delimiter = ",")
 
 \begin_layout Plain Layout
 
-wavfile.write(‘recon.wav’, fs, recon)
+wavfile.write('recon.wav', fs, recon)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:r-code"
+
+\end_inset
+
+
+\family sans
+R
+\family default
+ code to plot SSE 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval = F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dat <- read.csv("sse.csv", header = F)
+\end_layout
+
+\begin_layout Plain Layout
+
+colnames(dat) <- c("SSE") 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+sf <- stepfun(x = (seq_along(dat$SSE) - 1) * 2, y = c(0, dat$SSE))
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mgp = c(1.5,0.5,0), mar = c(2,1,3,0))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(sf, do.points = F, main = NA, cex.lab = 0.75, cex.axis = 0.75,
+\end_layout
+
+\begin_layout Plain Layout
+
+     xlab = NA, ylab = NA, xaxt = "n", yaxt = "n", frame.plot = F,
+\end_layout
+
+\begin_layout Plain Layout
+
+     xaxs = "i")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+z <- (seq_along(dat$SSE) - 1) * 2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+sec <- z + 10 
+\end_layout
+
+\begin_layout Plain Layout
+
+labs <- c("00:10", 
+\end_layout
+
+\begin_layout Plain Layout
+
+          paste(sprintf("%02d", sec[sec %% 30 == 0] %/% 60), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                c("30", "00"), sep = ":"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+axis(side = 1, at = c(0, z[z %% 30 == 0][-1] - 10), 
+\end_layout
+
+\begin_layout Plain Layout
+
+     labels = labs, cex.axis = 0.6)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.epoch <- c("intro", "ballad", "solo", "opera",
+\end_layout
+
+\begin_layout Plain Layout
+
+                "hard rock", "outro")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.epoch <- c(-10, 38, 144, 171, 235, 284)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mtext("epoch", side = 3, line = 2, cex = 0.6, at = -40, adj = 0, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.epoch)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.epoch[i], side = 3, line = 2, cex = 0.6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        at = sec.epoch[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.key <- c("B-flat maj", "A maj", "E-flat maj")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.key <- c(-10, 171, 192)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mtext("key", side = 3, line = 1, cex = 0.6, at = -40, adj = 0, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.key)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.key[i], side = 3, line = 1, cex = 0.6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        at = sec.key[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.inst <- c("vox", "piano", "bass", "set", "guitar", "vox", 
+\end_layout
+
+\begin_layout Plain Layout
+
+              "bass/set", "vox")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.inst <- c(-10, 5, 38, 73, 129, 174, 194, 243)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+mtext("instru-
+\backslash
+nment", line = -0.5, side = 3, cex = 0.6, at = -40, 
+\end_layout
+
+\begin_layout Plain Layout
+
+      adj = 0, font = 2)
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.inst)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.inst[i], side = 3, cex = 0.6, at = sec.inst[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+col.qt <- c("red", "blue")
+\end_layout
+
+\begin_layout Plain Layout
+
+lty.qt <- 2:3
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topright", legend = c("90th", "75th"), col = rev(col.qt), 
+\end_layout
+
+\begin_layout Plain Layout
+
+       lty = rev(lty.qt), bty = "n", cex = 0.6,
+\end_layout
+
+\begin_layout Plain Layout
+
+       title = "SSE percentiles")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+eps <- quantile(x = dat$SSE, probs = c(0.75, 0.9))
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h = eps, col = col.qt, lty = lty.qt)
 \end_layout
 
 \begin_layout Plain Layout
