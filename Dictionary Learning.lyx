@@ -3131,6 +3131,277 @@ how did the algorithm perform, how could it be extended
 \end_layout
 
 \begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<sse, echo = F, fig.height = 3.5, fig.width = 5.5, fig.align = 'center', fig.pos
+ = 'h', fig.cap = 'Reconstruction error for test data'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+dat <- read.csv("sse_and_sparsity.csv")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+sf <- stepfun(x = (seq_along(dat$SSE) - 1) * 2, y = c(0, dat$SSE))
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mgp = c(1.5,0.5,0), mar = c(2,0,3,0))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(sf, do.points = F, main = NA, cex.lab = 0.75, cex.axis = 0.75,
+\end_layout
+
+\begin_layout Plain Layout
+
+     xlab = NA, ylab = NA, xaxt = "n", yaxt = "n", frame.plot = F,
+\end_layout
+
+\begin_layout Plain Layout
+
+     xaxs = "i")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+z <- (seq_along(dat$SSE) - 1) * 2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+sec <- z + 10 
+\end_layout
+
+\begin_layout Plain Layout
+
+labs <- c("00:10", 
+\end_layout
+
+\begin_layout Plain Layout
+
+          paste(sprintf("%02d", sec[sec %% 30 == 0] %/% 60), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                c("30", "00"), sep = ":"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+axis(side = 1, at = c(0, z[z %% 30 == 0][-1] - 10), 
+\end_layout
+
+\begin_layout Plain Layout
+
+     labels = labs, cex.axis = 0.6)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.epoch <- c("intro", "ballad", "solo", "opera",
+\end_layout
+
+\begin_layout Plain Layout
+
+                "hard rock", "outro")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.epoch <- c(-10, 38, 144, 171, 235, 284)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.epoch)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.epoch[i], side = 3, line = 2, cex = 0.6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        at = sec.epoch[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.key <- c("B-flat maj", "A maj", "E-flat maj")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.key <- c(-10, 171, 192)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.key)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.key[i], side = 3, line = 1, cex = 0.6, 
+\end_layout
+
+\begin_layout Plain Layout
+
+        at = sec.key[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+labs.inst <- c("vox", "piano", "bass", "set", "guitar", "vox", 
+\end_layout
+
+\begin_layout Plain Layout
+
+              "bass/set", "vox")
+\end_layout
+
+\begin_layout Plain Layout
+
+sec.inst <- c(-10, 5, 38, 73, 129, 174, 194, 243)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for(i in seq_along(labs.inst)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  mtext(labs.inst[i], side = 3, cex = 0.6, at = sec.inst[i], adj = 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+col.qt <- c("red", "blue")
+\end_layout
+
+\begin_layout Plain Layout
+
+lty.qt <- 2:3
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+legend("topright", legend = c("90th", "75th"), col = rev(col.qt), 
+\end_layout
+
+\begin_layout Plain Layout
+
+       lty = rev(lty.qt), bty = "n", cex = 0.6,
+\end_layout
+
+\begin_layout Plain Layout
+
+       title = "SSE quantiles")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+eps <- quantile(x = dat$SSE, probs = c(0.75, 0.9))
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(h = eps, col = col.qt, lty = lty.qt)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
 bibfiles "library"
