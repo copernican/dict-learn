@@ -3457,7 +3457,7 @@ DictionaryLearning class of Python's
 scikit-learn
 \family default
 \series default
- library, and instead necessitate building code from first principals.
+ library, and instead necessitate building code from first principles.
  Similarly, other error measures could be developed to improve change point
  detection performance, rather than relying strictly on a threshold of the
  sum of the squared error.
