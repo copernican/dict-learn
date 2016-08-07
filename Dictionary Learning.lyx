@@ -507,7 +507,15 @@ mini-batch
 \end_inset
 
 .
- As in 
+ 
+\end_layout
+
+\begin_layout Standard
+ADD A COMMENT ABOUT DISCRETIZING ANALOG SIGNALS, I.E., SAMPLING IS INHERENT
+\end_layout
+
+\begin_layout Standard
+As in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Zhao2011"
@@ -1194,26 +1202,6 @@ status open
 
 
 \backslash
-State
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $\boldsymbol{\alpha}\gets\frac{1}{\eta}\sum_{i=1}^{\eta}\boldsymbol{\alpha}_{i}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
 Return{$
 \backslash
 boldsymbol{
@@ -1579,10 +1567,10 @@ Bohemian Rhapsody
 \end_inset
 
  for major musical changes and mapped them to timepoints in our audio, see
- Table 
+ 
 \begin_inset CommandInset ref
-LatexCommand ref
-reference "unusual_events"
+LatexCommand formatted
+reference "tab:unusual-events"
 
 \end_inset
 
@@ -1595,6 +1583,7 @@ reference "unusual_events"
 
 \begin_layout Standard
 \begin_inset Float table
+placement h
 wide false
 sideways false
 status open
@@ -2466,15 +2455,14 @@ vocals rejoin
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Unusual event detection rates
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:unusual-events"
 
 \end_inset
 
-
-\begin_inset CommandInset label
-LatexCommand label
-name "unusual_events"
+Unusual event detection rates
+\end_layout
 
 \end_inset
 
@@ -2491,15 +2479,24 @@ Implementation
 \end_layout
 
 \begin_layout Standard
-The algorithms designed and discussed in 
+The algorithms discussed in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
 
 \end_inset
 
- have been included in Python's scikit learning library, in the decomposition
- module (citation), so could be readily utilized for our application.
+ have been implemented in the 
+\family typewriter
+MiniBatchDictionaryLearning
+\family default
+ class of Python's 
+\family typewriter
+\series bold
+scikit-learn
+\family default
+\series default
+ library (citation), so could be readily utilized for our application.
  However, our use case required a hybrid implementation of the two methodologies
  of 
 \begin_inset CommandInset citation
@@ -2546,8 +2543,8 @@ key "Zhao2011"
  The final Python code is contained in Appendix A, but the basic structure
  is detailed in the pseudocode of Algorithm 
 \begin_inset CommandInset ref
-LatexCommand vref
-reference "pseudo_python"
+LatexCommand ref
+reference "alg:pseudo-python"
 
 \end_inset
 
@@ -2622,7 +2619,7 @@ Require
 \end_inset
 
  
-\begin_inset Formula $y\in\mathbb{R}^{M}$
+\begin_inset Formula $\mathbf{y}\in\mathbb{R}^{M}$
 \end_inset
 
 
@@ -2658,15 +2655,15 @@ State
 \end_inset
 
  Reshape 
-\begin_inset Formula $y$
+\begin_inset Formula $\mathbf{y}$
 \end_inset
 
  to 
-\begin_inset Formula $\mathbf{Y}\in(k,n)$
+\begin_inset Formula $\mathbf{Y}\in\mathbf{M}_{k,n}\left(\mathbb{R}\right)$
 \end_inset
 
- where 
-\begin_inset Formula $n=floor(M/k)$
+, where 
+\begin_inset Formula $n=\left\lfloor M/k\right\rfloor $
 \end_inset
 
 
@@ -2704,7 +2701,7 @@ State
  Extract initial training set: 
 \series bold
 
-\begin_inset Formula $\mathbf{X_{0}}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
+\begin_inset Formula $\mathbf{X_{0}}=\{\mathbf{Y}_{\mathcal{I}}\}^{\mathsf{T}}$
 \end_inset
 
 
@@ -2730,7 +2727,7 @@ State
 \end_inset
 
  Learn the initial dictionary 
-\begin_inset Formula $D_{0}\in(k,k)$
+\begin_inset Formula $\mathbf{D}_{0}\in\mathbf{M}_{k,k}\left(\mathbb{R}\right)$
 \end_inset
 
  from 
@@ -2754,11 +2751,11 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\alpha_{0}\in(j,k)$
+\begin_inset Formula $\boldsymbol{\alpha}_{0}\in\mathbf{M}_{j,k}\left(\mathbb{R}\right)$
 \end_inset
 
  using Orthogonal Matching Pursuit (OMP) with 
-\begin_inset Formula $D_{0}$
+\begin_inset Formula $\mathbf{D}_{0}$
 \end_inset
 
 
@@ -2778,7 +2775,7 @@ State
 \end_inset
 
  Reconstruct the training set data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{0}}=\mathbf{\alpha}_{\mathbf{0}}D_{0}\Rightarrow\hat{x}_{0}\in\mathbb{R}^{n}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{0}}=\boldsymbol{\mathbf{\alpha}}_{\mathbf{0}}\mathbf{D}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{n}$
 \end_inset
 
  
@@ -2876,7 +2873,7 @@ State
 \end_inset
 
  Extract 
-\begin_inset Formula $\mathbf{X_{t}}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
+\begin_inset Formula $\mathbf{X}_{t}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
 \end_inset
 
 , where 
@@ -2900,11 +2897,11 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\alpha_{t}\in(\eta,k)$
+\begin_inset Formula $\boldsymbol{\alpha}_{t}\in\mathbf{M}_{\eta,k}\left(\mathbb{R}\right)$
 \end_inset
 
  with 
-\begin_inset Formula $D_{t-1}$
+\begin_inset Formula $\mathbf{D}_{t-1}$
 \end_inset
 
 
@@ -2924,7 +2921,7 @@ State
 \end_inset
 
  Reconstruct the window of data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{t}}=\mathbf{\mathbf{\alpha}_{\mathbf{t}}}D_{t-1}\Rightarrow\hat{x}_{t}\in\mathbb{R}^{\eta k}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\mathbf{\boldsymbol{\mathbf{\alpha}}_{\mathbf{t}}}\mathbf{D}_{t-1}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
 \end_inset
 
  , append to previous reconstructions
@@ -2944,7 +2941,7 @@ State
 \end_inset
 
  Compute the sum of squared errors (SSE), 
-\begin_inset Formula $SSE_{t}=\sum(x_{t}-\hat{x}_{t})^{2}$
+\begin_inset Formula $SSE_{t}=\left\Vert \mathbf{x}_{t}-\hat{\mathbf{x}}_{t}\right\Vert _{2}^{2}$
 \end_inset
 
 
@@ -2964,11 +2961,11 @@ State
 \end_inset
 
  Update dictionary, 
-\begin_inset Formula $D_{t-1}\Rightarrow D_{t}$
+\begin_inset Formula $\mathbf{D}_{t-1}\Rightarrow\mathbf{D}_{t}$
 \end_inset
 
 , using 
-\begin_inset Formula $D_{t-1}$
+\begin_inset Formula $\mathbf{D}_{t-1}$
 \end_inset
 
  as a warm restart
@@ -3030,15 +3027,14 @@ end{algorithmic}
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Change Point Detection with Online Dictionary Learning
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:pseudo-python"
 
 \end_inset
 
-
-\begin_inset CommandInset label
-LatexCommand label
-name "pseudo_python"
+Change Point Detection with Online Dictionary Learning
+\end_layout
 
 \end_inset
 
