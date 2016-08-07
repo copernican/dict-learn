@@ -2482,6 +2482,13 @@ Unusual event detection rates
 
 \begin_layout Subsection
 Implementation
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Implementation"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3132,8 +3139,8 @@ We implemented this algorithm on one core of a Intel Xeon CPU with a 2.00GHz
 Discussion - TBD
 \end_layout
 
-\begin_layout Standard
-how did the algorithm perform, how could it be extended
+\begin_layout Subsection
+Results
 \end_layout
 
 \begin_layout Standard
@@ -3405,6 +3412,86 @@ abline(h = eps, col = col.qt, lty = lty.qt)
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Next Steps
+\end_layout
+
+\begin_layout Standard
+As stated previously, the concept of online dictionary learning is both
+ flexible and powerful, so can be applied to a wide range of use cases and
+ signal types.
+ However, optimization to any one specific application does require extensive
+ testing and tuning.
+ For example, further empirical testing of the seven parameters detailed
+ in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Implementation"
+
+\end_inset
+
+ is required before finding optimal performance in both runtime and reconstructi
+on behavior.
+ Eventually, as 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+ did, our application may require a modification to the underlying objective
+ function utiliized by the algorithms in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+.
+ This would require forgoing the use of the functions available in the MiniBatch
+DictionaryLearning class of Python's 
+\family typewriter
+\series bold
+scikit-learn
+\family default
+\series default
+ library, and instead necessitate building code from first principals.
+ Similarly, other error measures could be developed to improve change point
+ detection performance, rather than relying strictly on a threshold of the
+ sum of the squared error.
+\end_layout
+
+\begin_layout Standard
+In addition to optimization work, this use case readily suggests extensions
+ in multiple directions.
+ For example:
+\end_layout
+
+\begin_layout Itemize
+Classification of change point types (e.g.
+ instrument entrance/exit, key change, etc)
+\end_layout
+
+\begin_layout Itemize
+Classification of song elements (e.g.
+ highly specific genre/characteristics, a la Pandora's music genome project)
+\end_layout
+
+\begin_layout Itemize
+Using a learned dictionary one one song to compress other songs by the same
+ artist or in the same genre
+\end_layout
+
+\begin_layout Itemize
+Using a learned dictionary to predict a song's popularity
+\end_layout
+
+\begin_layout Standard
+Each of these applications could leverage the past work done on sparse represent
+ations, dictionary learning, and online processing techniques to develop
+ new algorithms and further the cutting-edge of signal processing technology.
 \end_layout
 
 \begin_layout Standard
