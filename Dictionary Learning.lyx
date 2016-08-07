@@ -3192,9 +3192,10 @@ Bohemian Rhapsody.
 
  In particular, we successfully detect both the guitar solo and the opera
  epoch, which are two of the most identifiable passages from the song.
- The algorithm also successfully and quickly learns these new features and
- the error drops when similar data are encountered in the subsequent windows.
- This is clear from the plot of the SSE in 
+ The algorithm also successfully and quickly learns these new features,
+ and the error drops when similar data are encountered in the subsequent
+ windows.
+ This is clear from the plot of the SSE, Figure 
 \begin_inset ERT
 status open
 
@@ -3207,8 +3208,8 @@ ref{fig:sse}
 
 \end_inset
 
-, where we get clear spikes, rather than a steady increase in error as the
- song progresses.
+, where we get spikes, rather than steady or increasing error as the song
+ progresses.
  That the detection was performed in an unsupervised fashion makes the result
  that much more significant.
  Further application of this algorithm to a particular signal would likely
@@ -3281,7 +3282,7 @@ Classification of song elements (e.g.
 \end_layout
 
 \begin_layout Itemize
-Using a learned dictionary one one song to compress other songs by the same
+Using a learned dictionary on one song to compress other songs by the same
  artist or in the same genre
 \end_layout
 
