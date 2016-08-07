@@ -4,7 +4,22 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
+<<<<<<< HEAD
 \textclass article
+=======
+\textclass amsart
+\begin_preamble
+\allowdisplaybreaks
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\dif}{d}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\tr}{tr}
+\usepackage{algpseudocode}
+\end_preamble
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
 \use_default_options true
 \maintain_unincluded_children false
 \language english
@@ -176,7 +191,7 @@ key "Elad2006"
 
 \begin_layout Standard
 A signal 
-\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{n}$
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{m}$
 \end_inset
 
  is said to have a 
@@ -188,7 +203,7 @@ A signal
 -sparse representation
 \emph default
  in a dictionary 
-\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{v}_{i}\right\} _{i\in\mathcal{I}}\subset\mathbb{R}^{n}$
+\begin_inset Formula $\mathcal{D}=\left\{ \mathbf{v}_{i}\right\} _{i\in\mathcal{I}}\subset\mathbb{R}^{m}$
 \end_inset
 
  if there is a system of coefficients 
@@ -332,99 +347,244 @@ key "Zhao2011"
 \end_layout
 
 \begin_layout Section
-Methodology - Courtney to start
+Methodology
 \end_layout
 
 \begin_layout Standard
-HERE IS THE CHEN CITATION, JUST COPY AND PASTE IT WHERE YOU NEED IT
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Chen1998"
+<<<<<<< HEAD
+We wish to optimize the following cost function: 
+\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+\end_inset
+
+.
+=======
+Suppose that we wish to learn a dictionary for a signal 
+\begin_inset Formula $\mathbf{x}\in\mathbb{R}^{m}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ be the matrix whose columns are the atoms (basis vectors) of the dictionary,
+ and consider the loss function
+\begin_inset Formula 
+\[
+l\left(\mathbf{x,}\mathbf{D}\right)\coloneqq\min_{\boldsymbol{\alpha}\in\mathbb{R}^{k}}\frac{1}{2}\left\Vert \mathbf{x}-\mathbf{D}\boldsymbol{\alpha}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}\right\Vert _{1},
+\]
 
 \end_inset
 
+which is known as the Least Absolute Shrinkage and Selection Operator (LASSO),
+ and where 
+\begin_inset Formula $\lambda$
+\end_inset
 
+ is a regularization parameter.
+ We see that 
+\begin_inset Formula $l\left(\mathbf{x},\mathbf{D}\right)$
+\end_inset
+
+ optimizes the sum of the squared error in reconstructing 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ using the dictionary 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ and the 1-norm of the coefficient vector 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+.
+ To avoid arbitrarily small values of 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+, we adopt the constraint that the basis vectors 
+\begin_inset Formula $\left\{ \mathbf{d}_{j}\right\} _{j=1}^{k}$
+\end_inset
+
+ have 2-norm of at most one.
+ Let 
+\begin_inset Formula $\mathcal{C}$
+\end_inset
+
+ be the set of matrices satisfying this constraint, i.e., 
+\begin_inset Formula 
+\[
+\mathcal{C}\coloneqq\left\{ \mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right):\left\Vert \mathbf{d}_{j}\right\Vert _{2}\leq1\ \forall j\in\left\{ 1,2,\ldots,k\right\} \right\} ,
+\]
+
+\end_inset
+
+so that the optimization becomes
+\begin_inset Formula 
+\begin{equation}
+\min_{\mathbf{D}\in\mathcal{C},\boldsymbol{\alpha}\in\mathbb{R}^{k}}\frac{1}{2}\left\Vert \mathbf{x}-\mathbf{D}\boldsymbol{\alpha}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}\right\Vert _{1}.\label{eq:lasso}
+\end{equation}
+
+\end_inset
+
+While this problem is not jointly convex, it is convex with respect to 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\alpha}$
+\end_inset
+
+ separately, so that a solution may be obtained by alternately optimizing
+ one variable while the other is held constant, as proposed by 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Lee2007"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-A learning dictionary algorithm from 
+Now suppose that we wish to learn a dictionary to represent a set of signals
+ 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}\right\} _{i=1}^{n}$
+\end_inset
+
+, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is possibly unknown, as in the case of a streaming signal.
+ Then, the optimization 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "eq:lasso"
+
+\end_inset
+
+ becomes
+\begin_inset Formula 
+\[
+\min_{\mathbf{D}\in\mathcal{C},\boldsymbol{\alpha}\in\mathbf{M}_{k,n}\left(\mathbb{R}\right)}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\left\Vert \mathbf{x}_{i}-\mathbf{D}\boldsymbol{\alpha}_{i}\right\Vert _{2}^{2}+\lambda\left\Vert \boldsymbol{\alpha}_{i}\right\Vert _{1}\right),
+\]
+
+\end_inset
+
+which is equation (4) from 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
 
 \end_inset
 
- has been implemented to identify unusual events that occur in the song,
- "Bohemian Rhaspody," by Queen.
- The first user defined t seconds are used to define the initial dictionary
- with the sparse coding algorithm.
- The algorithm employs a sliding window technique that moves through the
- song to identify events, t second portions of the song.
- These events are stored as a set of vectors, 
-\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
+.
+ The same authors propose a 
+\emph on
+mini-batch
+\emph default
+ extension of their algorithm 1 that considers 
+\begin_inset Formula $\eta>1$
+\end_inset
+
+ signals at each iteration 
+\begin_inset Formula $t\in\left\{ 1,2,\ldots T\right\} $
 \end_inset
 
 .
- Each event is examined in the algorithm to detect changes in the song that
- differ from the previous dictionary and learns new patterns that then updates
- the dictionary 
-\begin_inset Formula ${\bf D}$
+ We adopt this mini-batch method to process a streaming signal 
+\begin_inset Formula $\eta$
 \end_inset
 
- online.
- Additionally, a reconstruction weight vector is learned for each event.
- This weight vector is used to calculate the mean squared error.
- 
-\end_layout
-
-\begin_layout Standard
-We wish to optimize the following cost function: 
-\begin_inset Formula $f_{n}({\bf D)\triangleq\frac{1}{n}\sum_{i=1}^{n}l(x_{i},{\bf D)}}$
+ samples at a time, alternating between optimizing 
+\begin_inset Formula $\boldsymbol{\alpha}$
 \end_inset
 
-, where 
-\begin_inset Formula $l(x_{i},{\bf D)}$
-\end_inset
-
- is the loss function.
- Each column in 
+ and 
 \begin_inset Formula $\mathbf{D}$
 \end_inset
 
- is a basis vector.
- Minimizing the loss functions leaves us with the following problem: 
-\begin_inset Formula 
-\begin{equation}
-{\displaystyle \min_{{\bf D\in C,{\bf \alpha\in\mathbb{R}^{kxn}}}}\frac{1}{n}\sum_{i=1}^{n}\left(\frac{1}{2}\Vert x_{i}-{\bf D{\bf \alpha_{i}\Vert_{2}^{2}+\lambda\Vert{\bf \alpha_{i}\Vert_{1}}}}\right),}
-\end{equation}
+.
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+ 
+\begin_inset Formula $l(x_{i},{\bf D)}$
+\end_inset
+
+<<<<<<< HEAD
+ is the loss function defined as the 
+\begin_inset Formula $l_{1}-sparse$
+\end_inset
+
+ 
+\begin_inset Formula $coding$
+\end_inset
+
+ problem for least squares.
+ Each column in 
+\begin_inset Formula $\mathbf{D}$
+=======
+\begin_layout Standard
+ADD A COMMENT ABOUT DISCRETIZING ANALOG SIGNALS, I.E., SAMPLING IS INHERENT
+\end_layout
+
+\begin_layout Standard
+As in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
 
 \end_inset
 
- where 
-\begin_inset Formula $\lambda$
+, we will learn an initial dictionary 
+\begin_inset Formula $\mathbf{D}_{0}$
 \end_inset
 
- is the regularization parameter.
- This is essentially basis pursuit.
- It is important to note that this equation is only convex with respect
- to either 
-\begin_inset Formula ${\bf D}$
+ using the first 
+\begin_inset Formula $N$
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
 \end_inset
 
- or 
-\begin_inset Formula ${\bf \alpha}$
+ samples of the signal, then use a 
+\emph on
+sliding window
+\emph default
+ of width 
+\begin_inset Formula $w$
 \end_inset
 
- while the other is fixed.
- Stochatic gradient descent is used to make updates to the dictionary: 
-\begin_inset Formula 
-\begin{equation}
-\mathbf{D}_{t}=\Pi_{\mathcal{C}}{\bf \left[{\bf D_{t-1}-\frac{\rho}{t}\nabla Dl(x_{i},{\bf D_{t-1}}}\right].}
-\end{equation}
+ to obtain the samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t\right)}\right\} _{i=1}^{\eta}$
+\end_inset
+
+ for each iteration 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ We then compute the reconstruction coefficients 
+\begin_inset Formula $\boldsymbol{\alpha}_{t}$
+\end_inset
+
+ using Orthogonal Matching Pursuit (OMP), then use these coefficients to
+ compute the updated dictionary 
+\begin_inset Formula $\mathbf{D}_{t}$
+\end_inset
+
+ using Least Angle Regression (LARS) with 
+\begin_inset Formula $\mathbf{D}_{t-1}$
+\end_inset
+
+ as a warm restart.
+ Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:online-dict-learning"
 
 \end_inset
 
-
+ presents our approach.
 \end_layout
 
 \begin_layout Standard
@@ -458,13 +618,13 @@ status open
 
 
 \backslash
-State
+Require
 \end_layout
 
 \end_inset
 
- REQUIRE: 
-\begin_inset Formula ${\bf x}\in\mathbb{R}^{m}$
+ 
+\begin_inset Formula $\left\{ {\bf x}_{i}\right\} _{i=1}^{n}\in\mathbb{R}^{m}$
 \end_inset
 
 
@@ -479,26 +639,75 @@ State
 \uwave off
 \noun off
 \color none
- (event)~p(x) (algorithm to drawsamples),
+ (set of signals), 
 \begin_inset Formula $\lambda\in\mathbb{R}$
 \end_inset
 
- (regularization parameter),
-\begin_inset Formula ${\bf D_{0}\in\mathbb{R}^{mxk}}$
+ (regularization parameter), 
+\begin_inset Formula $\mathbf{D}_{0}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
 \end_inset
 
- (initial dictionary), T (number of iterations).
+ (initial dictionary), 
+\begin_inset Formula $w$
+\end_inset
+
+ (sliding window width).
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Formula $A_{0}\leftarrow0$
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Ensure
+\end_layout
+
 \end_inset
 
-, 
-\begin_inset Formula $B_{0}\leftarrow0$
+ learned dictionary 
+\begin_inset Formula $\mathbf{D}_{T}$
 \end_inset
 
- (reset the "past" information)
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Calculate the number of iterations 
+\begin_inset Formula $T$
+\end_inset
+
+ and the number of samples per iteration 
+\begin_inset Formula $\eta$
+\end_inset
+
+ based on the signal dimension 
+\begin_inset Formula $m$
+\end_inset
+
+, the number of signals 
+\begin_inset Formula $n$
+\end_inset
+
+, and the window width 
+\begin_inset Formula $w$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Plain Layout
@@ -530,73 +739,19 @@ State
 
 \end_inset
 
- Draw 
-\begin_inset Formula $x_{i}$
+ Sparse coding: compute 
+\begin_inset Formula $\boldsymbol{\alpha}_{t}$
 \end_inset
 
- from p(x).
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
+ as in algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:omp"
 
 \end_inset
 
- Sparse coding: compuse using LARS
-\begin_inset Formula 
-\begin{equation}
-\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\mathbb{R}^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $A_{t}\leftarrow A_{t-1}+\alpha_{t}\alpha_{t}^{T}$
-\end_inset
-
-.
- 
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- 
-\begin_inset Formula $B_{t}\leftarrow B_{t-1}+x_{t}\alpha_{t}^{T}$
+ for the samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t\right)}\right\} _{i=1}^{\eta}$
 \end_inset
 
 .
@@ -615,19 +770,430 @@ State
 
 \end_inset
 
- Compute 
-\begin_inset Formula ${\bf D_{t}}$
+<<<<<<< HEAD
+ is the regularization parameter 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Chen1998"
+=======
+ Dictionary update: compute 
+\begin_inset Formula $\mathbf{D}_{t}$
 \end_inset
 
- using Algorithm 2 with 
-\begin_inset Formula ${\bf D_{t-1}}$
+ using LARS, with 
+\begin_inset Formula $\mathbf{D}_{t-1}$
 \end_inset
 
- as warm restart, so that 
-\begin_inset Formula 
-\begin{equation}
-{\bf D_{t}}\triangleq{\displaystyle \min_{{\bf D\in C}}\frac{1}{t}{\displaystyle \sum_{i=1}^{t}\frac{1}{2}\Vert x_{i}-{\bf D\alpha_{i}\Vert_{2}^{2}+\lambda\Vert\alpha_{i}\Vert_{1}}}}={\displaystyle \min_{{\bf D\in C}}\frac{1}{t}\left(\frac{1}{2}Tr({\bf D^{T}{\bf DA_{t})-Tr({\bf D^{T}B_{t})}}}\right).}
-\end{equation}
+ as a warm restart.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{D}_{T}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:online-dict-learning"
+
+\end_inset
+
+Online Dictionary Learning
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:omp"
+
+\end_inset
+
+ provides the coefficient update.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}[1]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Require
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\left\{ {\bf x}_{i}\right\} _{i=1}^{\eta}\in\mathbb{R}^{m}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ (set of samples), 
+\begin_inset Formula $\lambda\in\mathbb{R}$
+\end_inset
+
+ (tolerance parameter), 
+\begin_inset Formula $\mathbf{D}\in\mathbf{M}_{m,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ (unit-norm dictionary).
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Ensure
+\end_layout
+
+\end_inset
+
+ coefficients 
+\begin_inset Formula $\boldsymbol{\alpha}\in\mathbf{M}_{k,\eta}\left(\mathbb{R}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$i=1$ to $
+\backslash
+eta$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathcal{I}\gets\emptyset$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}\gets\mathbf{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{r}=\mathbf{x}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+While{$
+\backslash
+left
+\backslash
+Vert 
+\backslash
+mathbf{r}
+\backslash
+right
+\backslash
+Vert _{2}>
+\backslash
+lambda$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $i'\gets\argmax_{j\in\left[k\right]\setminus\mathcal{I}}\left|\left\langle \mathbf{r},\mathbf{d}_{j}\right\rangle \right|$
+\end_inset
+
+, where 
+\begin_inset Formula $\mathbf{d}_{j}$
+\end_inset
+
+ is the 
+\begin_inset Formula $j\text{th}$
+\end_inset
+
+ column of 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathcal{I}\gets\mathcal{I}\cup\left\{ i'\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathcal{B}\gets\text{span}\left\{ \left\{ \mathbf{d}_{j}\right\} _{j\in\mathcal{I}}\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}\gets\Pi_{\mathcal{B}}\left(\mathbf{x}_{i}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\Pi_{\mathcal{B}}\left(\mathbf{x}_{i}\right)$
+\end_inset
+
+ is the projection of 
+\begin_inset Formula $\mathbf{x}_{i}$
+\end_inset
+
+ onto 
+\begin_inset Formula $\mathcal{B}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{r}\gets\mathbf{x}_{i}-\boldsymbol{\alpha}_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+EndWhile
+\end_layout
 
 \end_inset
 
@@ -660,7 +1226,9 @@ status open
 \backslash
 Return{$
 \backslash
-mathbf{D}_{t}$ (learned dictionary)}
+boldsymbol{
+\backslash
+alpha}$}
 \end_layout
 
 \end_inset
@@ -688,7 +1256,13 @@ end{algorithmic}
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Online dictionary learning
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:omp"
+
+\end_inset
+
+Orthogonal Matching Pursuit
 \end_layout
 
 \end_inset
@@ -699,102 +1273,285 @@ Online dictionary learning
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-Definition of unusual event / change point detection / whatever
 \end_layout
 
 \begin_layout Standard
-algorithm for unusual event detection, probably similar to 
+As the window slides along the set of signals, the optimization at each
+ iteration will produce a dictionary that is 
+\emph on
+adaptive
+\emph default
+, i.e., it can learn to represent new signal behavior, and given some specified
+ number of atoms, can also 
+\begin_inset Quotes eld
+\end_inset
+
+forget
+\begin_inset Quotes erd
+\end_inset
+
+ previously observed signal behavior that becomes rare or ceases to occur
+ altogether after some specified time.
+ In this way, our approach accommodates concept drift.
+\end_layout
+
+\begin_layout Subsection
+Unusual event detection
+\end_layout
+
+\begin_layout Standard
+As the window slides along the set of signals, we will update our dictionary
+ as described in the previous section.
+ When we slide to the 
+\begin_inset Formula $\left(t+1\right)\text{th}$
+\end_inset
+
+ window composed of samples 
+\begin_inset Formula $\left\{ \mathbf{x}_{i}^{\left(t+1\right)}\right\} _{i=1}^{\eta}$
+\end_inset
+
+, we will use our dictionary from the previous window 
+\begin_inset Formula $\mathbf{D}_{t}$
+\end_inset
+
+ to reconstruct the samples.
+ If the 
+\begin_inset Formula $\left(t+1\right)\text{th}$
+\end_inset
+
+ window is 
+\emph on
+unusual
+\emph default
+, i.e., it represents signal behavior that is either rare or novel, then our
+ dictionary will not be able to represent it accurately (the dictionary
+ will lack elements well-suited to approximating the new behavior).
+ In this case, and following 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Zhao2011"
 
 \end_inset
 
+, we expect that either a greater number of atoms will be required to reconstruc
+t the samples for a specified reconstruction error, or that the error in
+ reconstruction will increase for some desired sparsity 
+\begin_inset Formula $k$
+\end_inset
 
-\end_layout
-
-\begin_layout Section
-Application - TBD after code done
-\end_layout
-
-\begin_layout Subsection
-Structure of an audio signal
+.
+ In particular, we observe that this method is 
+\emph on
+unsupervised
+\emph default
+ insofar as we have given no prior definition for what constitutes an unusual
+ event; we have not even provided prior information regarding the signal
+ class.
 \end_layout
 
 \begin_layout Standard
-We now consider the problem of creating a digital representation of an (analog)
- audio signal.
- The signal is continuous as a function of time, so to digitize it we take
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+ determine the 
+\begin_inset Quotes eld
+\end_inset
+
+normality
+\begin_inset Quotes erd
+\end_inset
+
+ of an event 
+\begin_inset Formula $\mathbf{X}_{i}=\left\{ \mathbf{X}_{i}^{1},\ldots,\mathbf{X}_{i}^{n_{i}}\right\} $
+\end_inset
+
+ by computing the objective function 
+\begin_inset Formula 
+\[
+J\left(\mathbf{X}_{i},\boldsymbol{\alpha}_{i},\mathbf{D}\right)\coloneqq\frac{1}{2}\sum_{j=1}^{n_{i}}\left\Vert \mathbf{X}_{i}^{j}-\mathbf{D}\boldsymbol{\alpha}_{i}^{j}\right\Vert _{2}^{2}+\lambda_{1}\sum_{j=1}^{n_{i}}\left\Vert \boldsymbol{\alpha}^{j}\right\Vert _{1}+\lambda_{2}\sum_{j=1}^{n_{i}}\sum_{k=1}^{n_{i}}\mathbf{W}_{jk}\left\Vert \boldsymbol{\alpha}_{i}^{j}-\boldsymbol{\alpha}_{i}^{k}\right\Vert _{2}^{2},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\boldsymbol{\alpha}_{i}=\left\{ \boldsymbol{\alpha}_{i}^{1},\ldots,\boldsymbol{\alpha}_{i}^{n_{i}}\right\} $
+\end_inset
+
+ are the reconstruction weight vectors (coefficients), 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is the current dictionary, 
+\begin_inset Formula $\mathbf{W}$
+\end_inset
+
+ is the adjacency matrix of 
+\begin_inset Formula $\mathbf{X}_{i}$
+\end_inset
+
+, and 
+\begin_inset Formula $\lambda_{1},\lambda_{2}\in\mathbb{R}$
+\end_inset
+
+ are regularization parameters.
+ The first term gives the (squared) reconstruction error, the second term
+ implements sparsity regularization, and the third term implements 
+\begin_inset Quotes eld
+\end_inset
+
+smoothness
+\begin_inset Quotes erd
+\end_inset
+
+ regularization, which arises from the authors' application to video signals.
+ Then, a newly observed event 
+\begin_inset Formula $\mathbf{X}'$
+\end_inset
+
+ with reconstruction weight vectors 
+\begin_inset Formula $\boldsymbol{\alpha}'$
+\end_inset
+
+ learned using the current dictionary 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+ is said to be unusual if 
+\begin_inset Formula $J\left(\mathbf{X'},\boldsymbol{\alpha}',\mathbf{D}\right)$
+\end_inset
+
+ is greater than some specified threshold 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+It may not be necessary to implement smoothness regularization for other
+ signal classes, e.g., audio, and in practice we find that the reconstruction
+ sum of squared errors (SSE) tends to dominate the sparsity regularization.
+ Thus, for each iteration 
+\begin_inset Formula $t$
+\end_inset
+
+, we will compute the reconstruction sum of squared errors (SSE) and define
+ an event to be unusual if the SSE for the 
+\begin_inset Formula $t\text{th}$
+\end_inset
+
+ iteration is greater than a specified threshold.
+\end_layout
+
+\begin_layout Section
+Application
+\end_layout
+
+\begin_layout Subsection
+Overview
+\end_layout
+
+\begin_layout Standard
+To test the strengths of online dictionary learning for detecting change
+ points, we applied the concept of initial dictionary learning with sequential
+ dictionary update to an audio signal.
+ We hypothesize that the reconstruction of a signal window with the dictionary
+ learned prior will perform poorly if new elements were encountered during
+ that window (e.g.
+ new instruments, key changes, etc.).
+ This will result in a spike in the reconstruction error for that window,
+ allowing for the identification of change points.
+ Of note is that while we chose to use an audio signal in this application,
+ no aspect of the algorithm is specifically designed for audio and the learning
+ is entirely unsupervised, so these concepts can be just as readily adapted
+ for other types of data.
+ In this implementation, we chose to consider 
+\begin_inset Quotes eld
+\end_inset
+
+Bohemian Rhapsody
+\begin_inset Quotes erd
+\end_inset
+
+ by Queen, due to its frequent, noticeable (to the human ear) changes in
+ style, range, and tempo.
+\end_layout
+
+\begin_layout Standard
+Online dictionary learning seems well suited to this application since the
+ sequential updates to the dictionary inherently provides a temporal aspect
+ to the learning and reconstruction process.
+ If a dictionary was instead learned on the entire song, the major change
+ points might be masked since the dictionary 
+\begin_inset Quotes eld
+\end_inset
+
+knows
+\begin_inset Quotes erd
+\end_inset
+
+ what comes after.
+ With online learning, however, the dictionary has no a priori information
+ on what features will be in the next signal window, so is better suited
+ to identify changes.
+\end_layout
+
+\begin_layout Subsection
+Audio signal structure
+\end_layout
+
+\begin_layout Standard
+Analog audio is continuous as a function of time, so is digitized by taking
  discrete 
 \emph on
 samples
 \emph default
 .
- Each sample quantizes the 
+ The basic properties of this digitization include:
+\end_layout
+
+\begin_layout Itemize
+Each sample quantifies the 
 \emph on
 amplitude
 \emph default
  of the signal at a point in time.
- The 
+\end_layout
+
+\begin_layout Itemize
+The 
 \emph on
 sampling rate
 \emph default
  is the average number of samples obtained in one second.
- The resolution of each sample corresponds to the number of possible values
+ 
+\end_layout
+
+\begin_layout Itemize
+The resolution of each sample corresponds to the number of possible values
  of the amplitude, which is given by the 
 \emph on
 bit depth
 \emph default
 .
- We may also consider the number of 
+\end_layout
+
+\begin_layout Itemize
+The number of 
 \emph on
 channels
 \emph default
- used to represent a signal, each of which corresponds to a separate data
- stream that must be sampled.
-\end_layout
-
-\begin_layout Subsection
-What kind of dictionary could we learn for an audio signal
+ used to represent a signal correspond to separate data streams that must
+ be sampled.
 \end_layout
 
 \begin_layout Standard
-why might we want to do online learning for an audio signal (consider a
- stream, or a huge data set, or whatever), but biggest idea is that online
- learning allows us to detect unusual events (if we learn on the whole data
- set, then possibly our dictionary will learn the unusual events, impeding
- our ability to identify them)
-\end_layout
-
-\begin_layout Standard
-maybe insert image of different waveforms, e.g., as in 
-\begin_inset CommandInset href
-LatexCommand href
-name "http://www.seaandsailor.com/dictlearning.html"
-target "http://www.seaandsailor.com/dictlearning.html"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Unusual event as applied to an audio signal
-\end_layout
-
-\begin_layout Standard
-Change in meter, key change, whatever
-\end_layout
-
-\begin_layout Subsection
-Test case - Meredith/Sean
-\end_layout
-
-\begin_layout Standard
-We consider the song 
+For our application, we obtained an uncompressed, 16,000 Hz (sampling rate),
+ 16 bit (bit depth), monoaural (channels) waveform audio file (WAV) for
+ 
 \begin_inset Quotes eld
 \end_inset
 
@@ -802,13 +1559,28 @@ Bohemian Rhapsody
 \begin_inset Quotes erd
 \end_inset
 
- by Queen.
- For simplicity, we store the signal in the Waveform Audio File Format (WAV)
- with a sampling rate of 16,000 Hz, a bit depth of 16, and a single, i.e.,
- monaural, channel.
+.
+ At 16 bit depth, amplitudes range from 
+\begin_inset Formula $-2^{15}$
+\end_inset
+
+ to 
+\begin_inset Formula $2^{15}-1$
+\end_inset
+
+, so pre-processing the signal involved normalizing these amplitudes to
+ range from -1 to 1.
+ 
+\end_layout
+
+\begin_layout Subsection
+Unusual event identification
 \end_layout
 
 \begin_layout Standard
+For comparison with the peaks in the reconstruction errors and assessing
+ the performance of our implementation of online learning, we examined the
+ sheet music of 
 \begin_inset Quotes eld
 \end_inset
 
@@ -816,60 +1588,1129 @@ Bohemian Rhapsody
 \begin_inset Quotes erd
 \end_inset
 
- WAV or whatever, walk through the code, include graphics, especially SSE/MSE
- whatever reconstruction, and map peaks in error to 
-\begin_inset Quotes eld
-\end_inset
-
-events
-\begin_inset Quotes erd
-\end_inset
-
- (hopefully, unusual) in song
-\end_layout
-
-\begin_layout Standard
-This is how to add a Python 3 code chunk.
- knitr does not support Python plotting out of the box, but fortunately
- the knitron package makes it possible:
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset href
-LatexCommand href
-target "https://github.com/fhirschmann/knitron"
+ for major musical changes and mapped them to timepoints in our audio, see
+ 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "tab:unusual-events"
 
 \end_inset
 
-
+.
+ The song begins in 4/4 time in the key of B-flat major.
+ Only one key change occurs, but meter and instrumentation change frequently,
+ providing numerous opportunities to assess the algorithm's performance.
+ 
 \end_layout
 
 \begin_layout Standard
-Follow the instructions there to set it up, then load the package in hidden
- chunk.
+\begin_inset Float table
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="18" columns="5">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Time
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0:07
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meter change (5/4)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0:11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meter change (4/4)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0:15
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+new instrument (piano)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0:38
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+new instrument (cymbal swell)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0:48
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+new instrument (bass)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1:23
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+new instrument (set)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1:43
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meter change (2/4)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1:45
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meter change (4/4)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2:19
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+new instrument (guitar)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2:34
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+guitar solo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3:01
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+end guitar solo, key change (A major)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3:04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lead vocals rejoin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3:07
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+backing vocals rejoin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3:22
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+key change (E-flat major)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3:24
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+bass, set rejoin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4:05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+meter change (12/8)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4:13
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vocals rejoin
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:unusual-events"
+
+\end_inset
+
+Unusual event detection rates
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Implementation
 \end_layout
 
 \begin_layout Standard
+The algorithms discussed in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ have been implemented in the 
+\family typewriter
+MiniBatchDictionaryLearning
+\family default
+ class of Python's 
+\family typewriter
+\series bold
+scikit-learn
+\family default
+\series default
+ library (citation), so could be readily utilized for our application.
+ However, our use case required a hybrid implementation of the two methodologies
+ of 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\end_inset
+
+.
+<<<<<<< HEAD
+ This is essentially basis pursuit.
+=======
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+ 
+\end_layout
+
+\begin_layout Standard
+<<<<<<< HEAD
+In equation (1), 
+\begin_inset Formula $\frac{1}{2}\Vert x_{i}-{\bf D}\alpha_{i}\Vert_{2}^{2}$
+\end_inset
+
+ is the reconstruction error and 
+\begin_inset Formula $\lambda\Vert{\bf \alpha_{i}\Vert_{1}}$
+\end_inset
+
+ is the sparsity regularization.
+ A small reconstruction error indicates an usual event that was present
+ during the begining of the song.
+ A large reconstruction error indicates an unusual event.
+ As is stated by Zhao (2013), the presensce of the sparsity regularization
+ is important because the dictionary learning algorithm optimizes the sparsity
+ of the usual event reconstruction vectors.
+\end_layout
+
+\begin_layout Standard
+It is important to note that equation (1) is only convex with respect to
+ either 
+\begin_inset Formula ${\bf D}$
+\end_inset
+=======
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ contained the description and recommendations for applying the basic online
+ learning framework to vector data (by vectorizing image data), similar
+ to the format of the monoaural channel audio signal involved in this effort,
+ but utilized random sampling of the images.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+ used online learning to detect unusual events in video, paralleling our
+ application well, and detailed the use of a sliding window during processing,
+ rather than random samples.
+ Further guidance was provided by João Felipe Santos' application of online
+ learning to speech samples (citation), which directly addressed processing
+ audio.
+ The final Python code is contained in Appendix A, but the basic structure
+ is detailed in the pseudocode of Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:pseudo-python"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Optimization of the algorithm runtime was initiated from recommendations
+ from the literature, but were modified empirically until performance was
+ improved to acceptable runtimes.
+ The following parameters required empirical optimization:
+\end_layout
+
+\begin_layout Itemize
+Sparsity controlling parameter of the 
+\end_layout
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\begin_layout Itemize
+n_iter from the MiniBatch
+\end_layout
+
+<<<<<<< HEAD
+ while the other is fixed.
+ Stochatic gradient descent is used to make updates to the dictionary: 
+\begin_inset Formula 
+\begin{equation}
+{\bf D_{t}=\prod_{C}\left[{\bf D_{t-1}-\frac{\rho}{t}\bigtriangledown Dl(x_{i},{\bf D_{t-1}}}\right].}
+\end{equation}
+=======
+\begin_layout Itemize
+transform_algorithm
+\end_layout
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\begin_layout Itemize
+transform_alpha
+\end_layout
+
+\begin_layout Itemize
+window size
+\end_layout
+
+\begin_layout Itemize
+dictionary components
+\end_layout
+
+\begin_layout Standard
+A learning dictionary algorithm (see Algorithm 1) from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ has been implemented to identify unusual events that occur in the song,
+ "Bohemian Rhaspody," by Queen.
+ The first user defined t seconds are used to define the initial dictionary
+ with the sparse coding algorithm.
+ The algorithm employs a sliding window technique that moves through the
+ song to identify events, t second portions of the song.
+ These events are stored as a set of vectors, 
+\begin_inset Formula ${\bf {\bf X=\{{\bf X_{1},...,{\bf X_{m}\}}}}}$
+\end_inset
+
+.
+ Each event is examined in the algorithm to detect changes in the song that
+ differ from the previous dictionary and learns new patterns that then updates
+ the dictionary 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+ online (see Algorithm 2 from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+.
+ Additionally, a reconstruction weight vector is learned for each event.
+ This weight vector is used to calculate the sum of squares error (sse).
+ The sse is used to identify the unusual events.
+ If the sse excedes a use defined threshold, then the even is labeled as
+ unusual (see Algorithm 3 from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Zhao2011"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
-<<setup, echo = F, eval = F>>=
-\end_layout
 
-\begin_layout Plain Layout
-
-library(knitron)
-\end_layout
-
-\begin_layout Plain Layout
-
-@
-\end_layout
-
-\begin_layout Plain Layout
-
+\backslash
+<<<<<<< HEAD
+begin{algorithmic}
+=======
+begin{algorithmic}[2]
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
 \end_layout
 
 \end_inset
@@ -877,103 +2718,482 @@ library(knitron)
 
 \end_layout
 
-\begin_layout Standard
-We are now ready to run some Python code.
- Notice chunk option engine = 'ipython'.
- You'll need to install scipy, matplotlib, and numpy, which can be done
- with pip3 install scipy, matplotlib (numpy is a scipy dependency).
-\end_layout
-
-\begin_layout Standard
+\begin_layout Plain Layout
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
-<<example, eval = F, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align
- = 'center', fig.pos = 'h', fig.cap = 'figure caption'>>=
+
+\backslash
+Require
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathbf{y}\in\mathbb{R}^{M}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ (audio signal, WAV format, 16,000 Hz, monoaural channel), 
+\begin_inset Formula $k\in\mathbb{N}$
+\end_inset
+
+ (number of dictionary components)
 \end_layout
 
 \begin_layout Plain Layout
-
-# knitron already imports matplotlib for us
-\end_layout
-
-\begin_layout Plain Layout
-
-# import matplotlib.pyplot as plt
-\end_layout
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
-import scipy as sc
+
+\backslash
+State
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
 
-import numpy as np
-\end_layout
+ Reshape 
+\begin_inset Formula $\mathbf{y}$
+\end_inset
 
-\begin_layout Plain Layout
+ to 
+\begin_inset Formula $\mathbf{Y}\in\mathbf{M}_{k,n}\left(\mathbb{R}\right)$
+\end_inset
 
-\end_layout
+, where 
+\begin_inset Formula $n=\left\lfloor M/k\right\rfloor $
+\end_inset
 
-\begin_layout Plain Layout
-
-# Load signal used to build the dictionary
-\end_layout
-
-\begin_layout Plain Layout
-
-from scipy.io import wavfile
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-import os
-\end_layout
-
-\begin_layout Plain Layout
-
-# fs, data = wavfile.read("03 Shot In The Back Of The Head.wav")
-\end_layout
-
-\begin_layout Plain Layout
-
-# data = data / 2.0**15
-\end_layout
-
-\begin_layout Plain Layout
-
-# print(data.shape)
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
 \begin_layout Plain Layout
-
-# plt.rcParams.update({'font.size': 10})
-\end_layout
-
-\begin_layout Plain Layout
-
-         
-\end_layout
+\begin_inset ERT
+status open
 
 \begin_layout Plain Layout
 
-# plt.plot(data[0:fs*5]) 
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ INITIAL TRAINING
 \end_layout
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
 
-@
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+<<<<<<< HEAD
+ Sparse coding: compute using LARS
+\begin_inset Formula 
+\begin{equation}
+\alpha_{t}\triangleq{\displaystyle \min_{\alpha\in\mathbb{R}^{k}}\frac{1}{t}\Vert x_{t}-{\bf {D}_{t-1}\alpha\Vert_{2}^{2}+\lambda\Vert\alpha\Vert_{1}}}
+\end{equation}
+=======
+ Extract initial training set: 
+\series bold
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\begin_inset Formula $\mathbf{X_{0}}=\{\mathbf{Y}_{\mathcal{I}}\}^{\mathsf{T}}$
+\end_inset
+
+
+\series default
+, where 
+\begin_inset Formula $\mathcal{I\in}\{1,2,...,j\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Learn the initial dictionary 
+\begin_inset Formula $\mathbf{D}_{0}\in\mathbf{M}_{k,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ from 
+\begin_inset Formula $\mathbf{X_{0}}$
+\end_inset
+
+ using least angle regression (LARS) method to compute the LASSO solution
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the reconstruction matrix 
+\begin_inset Formula $\boldsymbol{\alpha}_{0}\in\mathbf{M}_{j,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ using Orthogonal Matching Pursuit (OMP) with 
+\begin_inset Formula $\mathbf{D}_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reconstruct the training set data and vectorize: 
+\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{0}}=\boldsymbol{\mathbf{\alpha}}_{\mathbf{0}}\mathbf{D}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{n}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ ONLINE LEARNING
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $\mathcal{T}=k(n-j)/(16,000w)$
+\end_inset
+
+, where 
+\begin_inset Formula $w$
+\end_inset
+
+ is the length of each sample window in seconds
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\eta=16000w/k$
+\end_inset
+
+, the number of vectors to extract 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$t=1$ to $
+\backslash
+mathcal{T}$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+<<<<<<< HEAD
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ REQUIRE: 
+\begin_inset Formula ${\bf D=[d_{1},...,d}_{k}]\in\R^{mxk}$
+\end_inset
+
+ (input dictionary), 
+\begin_inset Formula ${\bf A}=[a_{1}...,a_{k}]\in\R^{kxk}={\displaystyle \sum_{i=1}^{t}\alpha_{i}\alpha_{i}^{T}}$
+\end_inset
+
+, 
+\begin_inset Formula ${\bf B}=[b_{1},...,b_{k}]\in\R^{mxk}={\displaystyle \sum_{i=1}^{t}{\bf x_{i}}\alpha_{i}^{T}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ repeat 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \quad{}
+\end_inset
+
+for j=1 to k do
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \qquad{}
+\end_inset
+
+Update the j-th column to optimize for (4)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{equation}
+{\bf u_{j}\leftarrow\frac{1}{{\bf A_{jj}}}(b_{j}-{\bf D}a_{j})+d,}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Formula 
+\begin{equation}
+{\bf d_{j}\leftarrow\frac{1}{\max(\Vert{\bf u_{j}\Vert_{2},1)}}{\bf u_{j}}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \quad{}
+\end_inset
+
+end for
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ until convergence
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Return D (update dictionary)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Dictionary Update
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -986,8 +3206,481 @@ import os
 \end_layout
 
 \begin_layout Standard
-Include table of unusual events (key change, meter change, new instrument
- comes in)
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Input: song data, learning rate 
+\begin_inset Formula $\eta$
+\end_inset
+
+, threshold 
+\begin_inset Formula $\hat{\epsilon}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Learn initial dictionary using first N seconds in song
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ repeat
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Use sliding window to obtain event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Learn optimal reconstruction vectors 
+\begin_inset Formula $\alpha_{t}$
+\end_inset
+
+for event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+by solving (4) with 
+\begin_inset Formula ${\bf D}={\bf D_{t-1}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+if 
+\begin_inset Formula $J({\bf x_{t}},\alpha_{t},{\bf D_{t-1}})>\hat{\epsilon}$
+\end_inset
+
+then
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \qquad{}
+\end_inset
+
+Fire alarm for event 
+\begin_inset Formula ${\bf x_{t}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+end if
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset space \quad{}
+\end_inset
+
+Update dictionary 
+\begin_inset Formula ${\bf D}$
+\end_inset
+
+with (2)
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ until reach the end of the song
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Unusual event detection using sparse coding
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+=======
+\backslash
+State
+\end_layout
+
+\end_inset
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+ Extract 
+\begin_inset Formula $\mathbf{X}_{t}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
+\end_inset
+
+, where 
+\begin_inset Formula $I\in{\left\{ j+1+(t-1)\eta,...,j+1+t\eta\right\} }$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the reconstruction matrix 
+\begin_inset Formula $\boldsymbol{\alpha}_{t}\in\mathbf{M}_{\eta,k}\left(\mathbb{R}\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $\mathbf{D}_{t-1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Reconstruct the window of data and vectorize: 
+\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\mathbf{\boldsymbol{\mathbf{\alpha}}_{\mathbf{t}}}\mathbf{D}_{t-1}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
+\end_inset
+
+ , append to previous reconstructions
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Compute the sum of squared errors (SSE), 
+\begin_inset Formula $SSE_{t}=\left\Vert \mathbf{x}_{t}-\hat{\mathbf{x}}_{t}\right\Vert _{2}^{2}$
+\end_inset
+
+
+<<<<<<< HEAD
+<<setup, echo = F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+# library(knitron)
+\end_layout
+=======
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
+ Update dictionary, 
+\begin_inset Formula $\mathbf{D}_{t-1}\Rightarrow\mathbf{D}_{t}$
+\end_inset
+
+, using 
+\begin_inset Formula $\mathbf{D}_{t-1}$
+\end_inset
+
+ as a warm restart
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<<<<<< HEAD
+<<example, engine = 'ipython', fig.height = 3, fig.width = 5, fig.align = 'center',
+ fig.pos = 'h', fig.cap = 'figure caption'>>=
+\end_layout
+
+\begin_layout Plain Layout
+=======
+>>>>>>> 9f506aebe4036f5953da1ec8127ba7ed6866ab7a
+
+\backslash
+EndFor
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+Return{$
+\backslash
+mathbf{SSE}$ (Reconstruction Errors), 
+\backslash
+textbf{Reconstructed audio}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:pseudo-python"
+
+\end_inset
+
+Change Point Detection with Online Dictionary Learning
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then discuss the actual run, how long it took, processor, etc.
+ training time for initial dictionary, reconstruction 
 \end_layout
 
 \begin_layout Section
@@ -1001,7 +3694,7 @@ how did the algorithm perform, how could it be extended
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
-bibfiles "dict-learn/library"
+bibfiles "library"
 options "apalike"
 
 \end_inset
