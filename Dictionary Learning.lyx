@@ -2543,8 +2543,14 @@ key "Zhao2011"
  Further guidance was provided by João Felipe Santos' application of online
  learning to speech samples (citation), which directly addressed processing
  audio.
- The final Python code is contained in Appendix A, but the basic structure
- is detailed in the pseudocode of Algorithm 
+ The final Python code is contained in Appendix 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:code"
+
+\end_inset
+
+, but the basic structure is detailed in the pseudocode of Algorithm 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "alg:pseudo-python"
@@ -3406,6 +3412,476 @@ abline(h = eps, col = col.qt, lty = lty.qt)
 LatexCommand bibtex
 bibfiles "library"
 options "apalike"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+\start_of_appendix
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:code"
+
+\end_inset
+
+Python implementation
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval = F, engine = 'python'>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np
+\end_layout
+
+\begin_layout Plain Layout
+
+from sklearn.decomposition import MiniBatchDictionaryLearning
+\end_layout
+
+\begin_layout Plain Layout
+
+from scipy.io import wavfile
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+fs, data = wavfile.read("Bohemian_Rhapsody_16Khz_16bit_mono_cut.wav")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# normalize sound pressure values to (-1, 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+data = data / 2.0**15
+\end_layout
+
+\begin_layout Plain Layout
+
+data_len = data.shape[0]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# initialize reconstruction vector
+\end_layout
+
+\begin_layout Plain Layout
+
+recon = np.zeros(data_len)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# set training parameters & extract sample
+\end_layout
+
+\begin_layout Plain Layout
+
+train_factor = 10
+\end_layout
+
+\begin_layout Plain Layout
+
+end_train = fs * train_factor
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+n_components = 500         # number of atoms
+\end_layout
+
+\begin_layout Plain Layout
+
+n_features = n_components  # choose a "square" dictionary
+\end_layout
+
+\begin_layout Plain Layout
+
+n_samples_training = int(end_train / n_features)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+training_data_vec = data[0:end_train]  # 160,000 samples
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# reshape the training data to an array having dimensions
+\end_layout
+
+\begin_layout Plain Layout
+
+# (n_samples, n_features) = (160,1000)
+\end_layout
+
+\begin_layout Plain Layout
+
+training_data = training_data_vec.reshape(n_samples_training, n_features)
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# build the initial dictionary 
+\end_layout
+
+\begin_layout Plain Layout
+
+dico = MiniBatchDictionaryLearning(n_components = n_components,  
+\end_layout
+
+\begin_layout Plain Layout
+
+                                   alpha = 1, n_iter = 200,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                   transform_algorithm = 'omp',
+\end_layout
+
+\begin_layout Plain Layout
+
+                                   transform_alpha = 0.001)
+\end_layout
+
+\begin_layout Plain Layout
+
+dico = dico.fit(training_data)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# reconstruct the training set with the initial dictionary
+\end_layout
+
+\begin_layout Plain Layout
+
+D = dico.components_
+\end_layout
+
+\begin_layout Plain Layout
+
+alpha = dico.transform(training_data)
+\end_layout
+
+\begin_layout Plain Layout
+
+out = np.matmul(alpha, D).flatten()
+\end_layout
+
+\begin_layout Plain Layout
+
+recon[0:end_train] = out
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# extract testing signal & set online learning parameters
+\end_layout
+
+\begin_layout Plain Layout
+
+testing_data_vec = data[end_train:data_len]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# window width in seconds
+\end_layout
+
+\begin_layout Plain Layout
+
+window_width = 2
+\end_layout
+
+\begin_layout Plain Layout
+
+window_samples = window_width * fs
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# length of the test signal in seconds
+\end_layout
+
+\begin_layout Plain Layout
+
+sig_length = len(testing_data_vec) / fs
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# calculate the number of windows
+\end_layout
+
+\begin_layout Plain Layout
+
+num_windows = int(sig_length / window_width)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# calculate n_samples
+\end_layout
+
+\begin_layout Plain Layout
+
+n_samples_learn = int(window_samples / n_features)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# initialize SSE vector
+\end_layout
+
+\begin_layout Plain Layout
+
+sse = np.zeros(num_windows)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+offset = end_train
+\end_layout
+
+\begin_layout Plain Layout
+
+# begin online learning with SSE calculation
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(0, num_windows):
+\end_layout
+
+\begin_layout Plain Layout
+
+    # windows do not overlap
+\end_layout
+
+\begin_layout Plain Layout
+
+    start_idx = window_samples * i
+\end_layout
+
+\begin_layout Plain Layout
+
+    end_idx = window_samples * (i + 1)
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    # extract window of data; window_width = 2, so 32,000 samples
+\end_layout
+
+\begin_layout Plain Layout
+
+    orig = testing_data_vec[start_idx:end_idx]
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    # reshape the new data to an array of samples (32 x 1000)
+\end_layout
+
+\begin_layout Plain Layout
+
+    new_data = orig.reshape(n_samples_learn, n_features)
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\end_layout
+
+\begin_layout Plain Layout
+
+    # learn optimal reconstruction vector (32, 500)
+\end_layout
+
+\begin_layout Plain Layout
+
+    alpha = dico.transform(new_data)
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\end_layout
+
+\begin_layout Plain Layout
+
+    # compute SSE
+\end_layout
+
+\begin_layout Plain Layout
+
+    out = np.matmul(alpha, D).flatten()
+\end_layout
+
+\begin_layout Plain Layout
+
+    sse[i] = sum((out - orig)**2)
+\end_layout
+
+\begin_layout Plain Layout
+
+    objective[i] = 0.5 * sse[i] + sum(abs(alpha.flatten()))
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    # append to the reconstruction
+\end_layout
+
+\begin_layout Plain Layout
+
+    recon[offset + start_idx:offset + end_idx] = out
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+    # update the dictionary
+\end_layout
+
+\begin_layout Plain Layout
+
+    dico = dico.partial_fit(new_data)
+\end_layout
+
+\begin_layout Plain Layout
+
+    D = dico.components_
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# write out the SSE
+\end_layout
+
+\begin_layout Plain Layout
+
+np.savetxt('sse.csv', sse.T, delimiter = ",")
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
 
 \end_inset
 
