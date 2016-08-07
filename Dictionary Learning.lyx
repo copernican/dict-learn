@@ -1462,7 +1462,7 @@ Bohemian Rhapsody
 \begin_inset Quotes erd
 \end_inset
 
- by the British rock band Queen, due to its frequent, noticeable (to the
+ by the British rock band, Queen, due to its frequent, noticeable (to the
  human ear) changes in style, range, and tempo.
 \end_layout
 
@@ -3114,8 +3114,8 @@ At the 75th percentile of SSE (corresponding to
 \begin_inset Formula $\varepsilon_{75}\approx\Sexpr{round(eps[1],0)}$
 \end_inset
 
-), we would classify as unusual all the events classified as unusual at
- the 90th percentile, as well as
+), we would classify as unusual all the events classified at the 90th percentile
+, as well as
 \end_layout
 
 \begin_layout Itemize
