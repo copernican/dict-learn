@@ -2548,8 +2548,14 @@ key "Zhao2011"
  application well, and detailed the use of a sliding window during processing,
  rather than random samples.
  Further guidance was provided by João Felipe Santos' application of online
- learning to speech samples (citation), which directly addressed processing
- audio.
+ learning to speech samples 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "joãofelipesantos2014"
+
+\end_inset
+
+, which directly addressed processing audio.
  The final Python code is contained in Appendix 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -2949,7 +2955,7 @@ State
 \end_inset
 
 , where 
-\begin_inset Formula $I\in{\left\{ p+1+(t-1)\eta,...,p+1+t\eta\right\} }$
+\begin_inset Formula $\mathcal{I}\in{\left\{ p+1+(t-1)\eta,...,p+1+t\eta\right\} }$
 \end_inset
 
 
