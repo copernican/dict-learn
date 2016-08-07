@@ -2555,34 +2555,90 @@ reference "alg:pseudo-python"
 \end_layout
 
 \begin_layout Standard
-Optimization of the algorithm runtime was initiated from recommendations
+Optimization of the algorithm runtime was initiated with recommendations
  from the literature, but were modified empirically until performance was
  improved to acceptable runtimes.
  The following parameters required empirical optimization:
 \end_layout
 
 \begin_layout Itemize
-Sparsity controlling parameter of the 
+
+\series bold
+Sparsity controlling parameter of Equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:lasso"
+
+\end_inset
+
+:
+\series default
+ Due to the length of the signals used during online learning, the suggested
+ value in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mairal2009"
+
+\end_inset
+
+ of 
+\begin_inset Formula $1.2/\sqrt{m}$
+\end_inset
+
+ did not perform well and was changed back to the default value of 1.
 \end_layout
 
 \begin_layout Itemize
-n_iter from the MiniBatch
+
+\series bold
+Number of iterations to perform during each training window: 
+\series default
+Reduced to 200 from the default of 1000 to improve runtime.
 \end_layout
 
 \begin_layout Itemize
-transform_algorithm
+
+\series bold
+Algorithm used to fit the dictionary to the input signal:
+\series default
+ least angle regression (LARS, default), the coordinate descent alternative
+ performed much more slowly.
 \end_layout
 
 \begin_layout Itemize
-transform_alpha
+
+\series bold
+Algorithm used to transform the input signal and generate the reconstruction
+ vector: 
+\series default
+orthogonal matching pursuit (OMP); LASSO_LARS was also tested but performed
+ much more slowly.
 \end_layout
 
 \begin_layout Itemize
-window size
+
+\series bold
+The tolerance parameter of the OMP algorithm: 
+\series default
+Set to 0.001 to ensure strong reconstruction.
 \end_layout
 
 \begin_layout Itemize
-dictionary components
+
+\series bold
+Window Size: 
+\series default
+2 seconds, a value that provided a good trade-off between runtime performance
+ and the resolution of results.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Number of dictionary components extracted: 
+\series default
+500, a value that provided a good trade-off between runtime performance
+ and strong reconstruction capabilities.
 \end_layout
 
 \begin_layout Standard
