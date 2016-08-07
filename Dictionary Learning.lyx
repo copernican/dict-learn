@@ -127,7 +127,7 @@ Sparse representation of a natural signal in terms of a dictionary learned
  We review the key concepts of sparse dictionary learning and important
  results related to the online extension of such methods.
  We show that online dictionary learning can be used to detect unusual events
- in audio signals, such as a change in meter or the appearance of a new
+ in audio signals, such as a change in meter or the introduction of a new
  instrument, and that such methods are robust to concept drift in the target
  signal.
 \end_layout
@@ -196,7 +196,8 @@ Predefined dictionaries are often used to represent signals.
  matrices, whose elements can be used to encode images.
  In place of a predefined dictionary, we may also choose to learn a dictionary
  directly from the signal of interest, a procedure that has been shown,
- e.g., by 
+ e.g.
+ by 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Elad2006"
@@ -320,7 +321,7 @@ key "Mairal2009"
 
 \end_inset
 
- proposes an 
+ propose an 
 \emph on
 online
 \emph default
@@ -359,7 +360,7 @@ key "Zhao2011"
 
 \end_inset
 
- has shown that online algorithms are robust to concept drift precisely
+ have shown that online algorithms are robust to concept drift precisely
  because they permit the dictionary to adapt to new phenomena.
 \end_layout
 
@@ -458,7 +459,7 @@ key "Lee2007"
 \end_layout
 
 \begin_layout Standard
-Now suppose that we wish to learn a dictionary to represent a set of signals
+Now suppose that we wish to learn a dictionary to represent a set of samples
  
 \begin_inset Formula $\left\{ \mathbf{x}_{i}\right\} _{i=1}^{n}$
 \end_inset
@@ -499,7 +500,7 @@ mini-batch
 \begin_inset Formula $\eta>1$
 \end_inset
 
- signals at each iteration 
+ samples at each iteration 
 \begin_inset Formula $t\in\left\{ 1,2,\ldots\mathcal{T}\right\} $
 \end_inset
 
@@ -1446,17 +1447,13 @@ Overview
 To test the strengths of online dictionary learning for detecting change
  points, we applied the concept of initial dictionary learning with sequential
  dictionary update to an audio signal.
- We hypothesize that the reconstruction of a signal window with the dictionary
- learned prior will perform poorly if new elements were encountered during
- that window (e.g.
+ As stated previously, we hypothesize that the reconstruction of a signal
+ window with the dictionary learned prior will perform poorly if new elements
+ were encountered during that window (e.g.
  new instruments, key changes, etc.).
  This will result in a spike in the reconstruction error for that window,
  allowing for the identification of change points.
- Of note is that while we chose to use an audio signal in this application,
- no aspect of the algorithm is specifically designed for audio and the learning
- is entirely unsupervised, so these concepts can be just as readily adapted
- for other types of data.
- In this implementation, we chose to consider 
+ We chose to consider 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1596,7 +1593,7 @@ reference "tab:unusual-events"
 
 .
  The song begins in 4/4 time in the key of B-flat major.
- Two key changes occur, as well as numerous meter and instrumentation changes,
+ Two key changes occur, as well as frequent meter and instrumentation changes,
  providing numerous opportunities to assess the algorithm's performance.
  
 \end_layout
@@ -2124,7 +2121,7 @@ status open
 
 
 \backslash
-begin{algorithmic}[2]
+begin{algorithmic}[1]
 \end_layout
 
 \end_inset
@@ -2228,13 +2225,13 @@ State
  Extract initial training set: 
 \series bold
 
-\begin_inset Formula $\mathbf{X}_{0}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} {}^{T}$
+\begin_inset Formula $\mathbf{X}_{0}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} $
 \end_inset
 
 
 \series default
 , where 
-\begin_inset Formula $\mathcal{I\in}\left\{ 1,2,...,p\right\} $
+\begin_inset Formula $\mathcal{I}\in\left\{ 1,2,...,N\right\} $
 \end_inset
 
 
@@ -2278,7 +2275,7 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\boldsymbol{\alpha}_{0}\in\mathbf{M}_{p,k}\left(\mathbb{R}\right)$
+\begin_inset Formula $\boldsymbol{\alpha}_{0}\in\mathbf{M}_{k,N}\left(\mathbb{R}\right)$
 \end_inset
 
  using Orthogonal Matching Pursuit (OMP) with 
@@ -2302,7 +2299,7 @@ State
 \end_inset
 
  Reconstruct the training set data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{0}=\boldsymbol{\alpha}_{0}\mathbf{D}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{n}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{0}=\mathbf{D}_{0}\boldsymbol{\alpha}_{0}\Rightarrow\hat{\mathbf{x}}_{0}\in\mathbb{R}^{Nk}$
 \end_inset
 
  
@@ -2338,7 +2335,7 @@ State
 \end_inset
 
  
-\begin_inset Formula $\mathcal{T}=k\left(n-p\right)/\left(16,000w\right)$
+\begin_inset Formula $T=k\left(n-N\right)/\left(16,000w\right)$
 \end_inset
 
 , where 
@@ -2376,9 +2373,7 @@ status open
 
 
 \backslash
-For{$t=1$ to $
-\backslash
-mathcal{T}$}
+For{$t=1$ to $T$}
 \end_layout
 
 \end_inset
@@ -2400,11 +2395,11 @@ State
 \end_inset
 
  Extract 
-\begin_inset Formula $\mathbf{X}_{t}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} {}^{T}$
+\begin_inset Formula $\mathbf{X}_{t}=\left\{ \mathbf{Y}_{\mathcal{I}}\right\} $
 \end_inset
 
 , where 
-\begin_inset Formula $\mathcal{I}\in\left\{ p+1+(t-1)\eta,...,p+1+t\eta\right\} $
+\begin_inset Formula $\mathcal{I}\in\left\{ N+1+(t-1)\eta,...,N+1+t\eta\right\} $
 \end_inset
 
 
@@ -2424,7 +2419,7 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\boldsymbol{\alpha}_{t}\in\mathbf{M}_{\eta,k}\left(\mathbb{R}\right)$
+\begin_inset Formula $\boldsymbol{\alpha}_{t}\in\mathbf{M}_{k,\eta}\left(\mathbb{R}\right)$
 \end_inset
 
  with 
@@ -2448,7 +2443,7 @@ State
 \end_inset
 
  Reconstruct the window of data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\boldsymbol{\alpha}_{t}\mathbf{D}_{t-1}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{t}=\mathbf{D}_{t-1}\boldsymbol{\alpha}_{t}\Rightarrow\hat{\mathbf{x}}_{t}\in\mathbb{R}^{\eta k}$
 \end_inset
 
  , append to previous reconstructions
@@ -2620,7 +2615,7 @@ Reduced to 200 from the default of 1000 to improve runtime.
 \series bold
 Algorithm used to fit the dictionary to the input signal:
 \series default
- least angle regression (LARS, default), the coordinate descent alternative
+ least angle regression (LARS, default); the coordinate descent alternative
  performed much more slowly.
 \end_layout
 
@@ -2647,8 +2642,16 @@ Set to 0.001 to ensure strong reconstruction.
 \series bold
 Window Size: 
 \series default
-2 seconds, a value that provided a good trade-off between runtime performance
- and the resolution of results.
+The window size was of particular concern because it directly affects the
+ resolution of the output SSE data.
+ That is, by having a window size that was too large, it would be difficult
+ to identify the true location of changes, since a single window could potential
+ly contain multiple novel musical features.
+ These features would be learned in one iteration of code, but recorded
+ using only a single error value, inhibiting change point detection.
+ However, runtime prevented the use of a window that was too narrow.
+ We chose a window size of 2 seconds, to obtain an acceptably short runtime
+ while maintaining adequate resolution.
 \end_layout
 
 \begin_layout Itemize
@@ -3085,7 +3088,7 @@ reference "tab:unusual-events"
 \end_inset
 
 .
- We also observe that we do 
+ Further, we do 
 \emph on
 not
 \emph default
@@ -3135,7 +3138,7 @@ outro
 \end_layout
 
 \begin_layout Standard
-Now, the false positive rate will go to 100% as 
+The false positive rate will go to 100% as 
 \begin_inset Formula $\varepsilon$
 \end_inset
 
@@ -3176,6 +3179,23 @@ Bohemian Rhapsody.
 
  In particular, we successfully detect both the guitar solo and the opera
  epoch, which are two of the most identifiable passages from the song.
+ The algorithm also successfully and quickly learns these new features and
+ the error drops when similar data is encountered in the subsequent windows.
+ This is clear from the plot of the SSE in 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ref{fig:sse}
+\end_layout
+
+\end_inset
+
+, where we get clear spikes, rather than a steady increase in error as the
+ song progresses.
  That the detection was performed in an unsupervised fashion makes the result
  that much more significant.
  Further application of this algorithm to a particular signal would likely
@@ -3188,11 +3208,10 @@ Next Steps
 \end_layout
 
 \begin_layout Standard
-As stated previously, the concept of online dictionary learning is both
- flexible and powerful, so can be applied to a wide range of use cases and
- signal types.
+The concept of online dictionary learning is both flexible and powerful,
+ so can be applied to a wide range of use cases and signal types.
  However, optimization to any one specific application does require extensive
- testing and tuning.
+ testing and tuning, as evidenced by the results detailed above.
  For example, further empirical testing of the seven parameters detailed
  in Section 
 \begin_inset CommandInset ref
@@ -3201,8 +3220,8 @@ reference "subsec:Implementation"
 
 \end_inset
 
- is required before finding optimal performance in both runtime and reconstructi
-on behavior.
+ would be required before finding optimal performance in both runtime and
+ reconstruction behavior.
  Eventually, as 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -3210,8 +3229,8 @@ key "Zhao2011"
 
 \end_inset
 
- did, our application may require a modification to the underlying objective
- function utiliized by the algorithms in 
+ did, our application might require a modification to the underlying objective
+ function utilized by the algorithms in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mairal2009"
@@ -3723,6 +3742,11 @@ for i in range(0, num_windows):
 \begin_layout Plain Layout
 
 np.savetxt('sse.csv', sse.T, delimiter = ",")
+\end_layout
+
+\begin_layout Plain Layout
+
+wavfile.write(‘recon.wav’, fs, recon)
 \end_layout
 
 \begin_layout Plain Layout
