@@ -2552,6 +2552,37 @@ reference "pseudo_python"
 \end_layout
 
 \begin_layout Standard
+Optimization of the algorithm runtime was initiated from recommendations
+ from the literature, but were modified empirically until performance was
+ improved to acceptable runtimes.
+ The following parameters required empirical optimization:
+\end_layout
+
+\begin_layout Itemize
+Sparsity controlling parameter of the 
+\end_layout
+
+\begin_layout Itemize
+n_iter from the MiniBatch
+\end_layout
+
+\begin_layout Itemize
+transform_algorithm
+\end_layout
+
+\begin_layout Itemize
+transform_alpha
+\end_layout
+
+\begin_layout Itemize
+window size
+\end_layout
+
+\begin_layout Itemize
+dictionary components
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float algorithm
 placement h
 wide false
@@ -2588,7 +2619,7 @@ Require
 \end_inset
 
  
-\begin_inset Formula $x\in\mathbb{R}^{m}$
+\begin_inset Formula $y\in\mathbb{R}^{M}$
 \end_inset
 
 
@@ -2623,6 +2654,34 @@ State
 
 \end_inset
 
+ Reshape 
+\begin_inset Formula $y$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbf{Y}\in(k,n)$
+\end_inset
+
+ where 
+\begin_inset Formula $n=floor(M/k)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+State
+\end_layout
+
+\end_inset
+
  INITIAL TRAINING
 \end_layout
 
@@ -2639,32 +2698,16 @@ State
 
 \end_inset
 
- Extract initial training set, 
-\begin_inset Formula $x_{0}\in\mathbb{R}^{n}$
+ Extract initial training set: 
+\series bold
+
+\begin_inset Formula $\mathbf{X_{0}}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
 \end_inset
 
 
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- Reshape 
-\begin_inset Formula $x_{0}$
-\end_inset
-
- to 
-\begin_inset Formula $\mathbf{X_{0}}\in(n/k,k)$
+\series default
+, where 
+\begin_inset Formula $\mathcal{I\in}\{1,2,...,j\}$
 \end_inset
 
 
@@ -2708,7 +2751,7 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\alpha_{0}\in(n/k,k)$
+\begin_inset Formula $\alpha_{0}\in(j,k)$
 \end_inset
 
  using Orthogonal Matching Pursuit (OMP) with 
@@ -2768,7 +2811,7 @@ State
 \end_inset
 
  
-\begin_inset Formula $T=(m-n)/(16,000w)$
+\begin_inset Formula $\mathcal{T}=k(n-j)/(16,000w)$
 \end_inset
 
 , where 
@@ -2786,7 +2829,29 @@ status open
 
 
 \backslash
-For{$t=1$ to $T$}
+State
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $\eta=16000w/k$
+\end_inset
+
+, the number of vectors to extract 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+For{$t=1$ to $
+\backslash
+mathcal{T}$}
 \end_layout
 
 \end_inset
@@ -2808,31 +2873,11 @@ State
 \end_inset
 
  Extract 
-\begin_inset Formula $x_{t}\in\mathbb{R}^{16,000w}$
+\begin_inset Formula $\mathbf{X_{t}}=\{\mathbf{Y}_{\mathcal{I}}\}^{T}$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-State
-\end_layout
-
-\end_inset
-
- Reshape 
-\begin_inset Formula $x_{t}$
-\end_inset
-
- to 
-\begin_inset Formula $\mathbf{X_{t}}\in(16,000w/k,k)$
+, where 
+\begin_inset Formula $I\in{\left\{ j+1+(t-1)\eta,...,j+1+t\eta\right\} }$
 \end_inset
 
 
@@ -2852,7 +2897,7 @@ State
 \end_inset
 
  Compute the reconstruction matrix 
-\begin_inset Formula $\alpha_{t}\in(16,000w/k,k)$
+\begin_inset Formula $\alpha_{t}\in(\eta,k)$
 \end_inset
 
  with 
@@ -2876,7 +2921,7 @@ State
 \end_inset
 
  Reconstruct the window of data and vectorize: 
-\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{t}}=\mathbf{\mathbf{\alpha}_{\mathbf{t}}}D_{t-1}\Rightarrow\hat{x}_{t}\in\mathbb{R}^{16,000w}$
+\begin_inset Formula $\mathbf{\widehat{X}}_{\mathbf{t}}=\mathbf{\mathbf{\alpha}_{\mathbf{t}}}D_{t-1}\Rightarrow\hat{x}_{t}\in\mathbb{R}^{\eta k}$
 \end_inset
 
  , append to previous reconstructions
@@ -3003,7 +3048,8 @@ name "pseudo_python"
 \end_layout
 
 \begin_layout Standard
-Several concerns 
+Then discuss the actual run, how long it took, processor, etc.
+ training time for initial dictionary, reconstruction 
 \end_layout
 
 \begin_layout Section
