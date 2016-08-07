@@ -3647,7 +3647,7 @@ training_data_vec = data[0:end_train]  # 160,000 samples
 
 \begin_layout Plain Layout
 
-# (n_samples, n_features) = (160,1000)
+# (n_samples, n_features) = (320,500)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3864,7 +3864,7 @@ for i in range(0, num_windows):
 
 \begin_layout Plain Layout
 
-    # reshape the new data to an array of samples (32 x 1000)
+    # reshape the new data to an array of samples (64, 500)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3879,7 +3879,7 @@ for i in range(0, num_windows):
 
 \begin_layout Plain Layout
 
-    # learn optimal reconstruction vector (32, 500)
+    # learn optimal reconstruction vector (64, 500)
 \end_layout
 
 \begin_layout Plain Layout
@@ -3905,11 +3905,6 @@ for i in range(0, num_windows):
 \begin_layout Plain Layout
 
     sse[i] = sum((out - orig)**2)
-\end_layout
-
-\begin_layout Plain Layout
-
-    objective[i] = 0.5 * sse[i] + sum(abs(alpha.flatten()))
 \end_layout
 
 \begin_layout Plain Layout
