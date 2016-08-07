@@ -1508,15 +1508,7 @@ Each sample quantifies the
 \emph on
 amplitude
 \emph default
- of the signal at a point in time in a range from 
-\begin_inset Formula $-2^{15}$
-\end_inset
-
- to 
-\begin_inset Formula $2^{15}-1$
-\end_inset
-
-.
+ of the signal at a point in time.
 \end_layout
 
 \begin_layout Itemize
@@ -1558,6 +1550,17 @@ Bohemian Rhapsody
 \end_inset
 
 .
+ At 16 bit depth, amplitudes range from 
+\begin_inset Formula $-2^{15}$
+\end_inset
+
+ to 
+\begin_inset Formula $2^{15}-1$
+\end_inset
+
+, so pre-processing the signal involved normalizing these amplitudes to
+ range from -1 to 1.
+ 
 \end_layout
 
 \begin_layout Subsection
