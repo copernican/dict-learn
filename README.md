@@ -1,1 +1,6 @@
 # dict-learn
+This repository contains the final paper and supporting code for our project for [MATH-623 Sparse Representations and Random Sampling](http://courses.georgetown.edu/index.cfm?Action=View&CourseID=MATH-623&AcademicYear=2015&AcademicTerm=Summer) at Georgetown University, given summer 2016 by Professor Nate Strawn. We reproduce below the abstract from our paper, "Online Detection of Unusual Events in Audio via Dynamic Sparse Coding."
+
+>Sparse representation of a natural signal in terms of a dictionary learned from the signal itself has been shown to be highly effective. Online methods for dictionary learning mitigate scalability issues with traditional batch learning methods, and offer the ability to learn dictionaries for streaming signals. We review the key concepts of sparse dictionary learning and important results related to the online extension of such methods. We show that online dictionary learning can be used to detect unusual events in audio signals, such as a change in meter or the introduction of a new instrument, and that such methods are robust to concept drift in the target signal.
+
+We rely on the Python library scikit-learn, and are grateful to its creators and maintainers.
